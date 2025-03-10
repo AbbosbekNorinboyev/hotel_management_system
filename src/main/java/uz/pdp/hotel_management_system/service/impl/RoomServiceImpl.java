@@ -1,7 +1,9 @@
 package uz.pdp.hotel_management_system.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.ResponseDTO;
 import uz.pdp.hotel_management_system.dto.RoomCreateDTO;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RoomServiceImpl implements RoomService {
     private final RoomMapper roomMapper;
     private final RoomRepository roomRepository;
@@ -23,8 +26,9 @@ public class RoomServiceImpl implements RoomService {
     public ResponseDTO<RoomCreateDTO> createRoom(RoomCreateDTO roomCreateDTO) {
         Room room = roomMapper.toEntity(roomCreateDTO);
         roomRepository.save(room);
+        log.info("Room successfully created");
         return ResponseDTO.<RoomCreateDTO>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Room successfully saved")
                 .success(true)
                 .data(roomMapper.toDto(room))
@@ -35,8 +39,9 @@ public class RoomServiceImpl implements RoomService {
     public ResponseDTO<RoomCreateDTO> getRoomById(Integer roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found: " + roomId));
+        log.info("Room successfully found");
         return ResponseDTO.<RoomCreateDTO>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Room successfully found")
                 .success(true)
                 .data(roomMapper.toDto(room))
@@ -46,9 +51,19 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public ResponseDTO<List<RoomCreateDTO>> getAllRoom() {
         List<Room> rooms = roomRepository.findAll();
+        if (!rooms.isEmpty()) {
+            log.info("Room list successfully found");
+            return ResponseDTO.<List<RoomCreateDTO>>builder()
+                    .code(HttpStatus.OK.value())
+                    .message("Room list successfully found")
+                    .success(true)
+                    .data(rooms.stream().map(roomMapper::toDto).toList())
+                    .build();
+        }
+        log.error("Room list not found");
         return ResponseDTO.<List<RoomCreateDTO>>builder()
-                .code(200)
-                .message("Room list successfully found")
+                .code(HttpStatus.NOT_FOUND.value())
+                .message("Room list not found")
                 .success(true)
                 .data(rooms.stream().map(roomMapper::toDto).toList())
                 .build();
@@ -64,8 +79,9 @@ public class RoomServiceImpl implements RoomService {
         roomFound.setStatus(roomCreateDTO.getStatus());
         roomFound.setState(roomCreateDTO.getState());
         roomRepository.save(roomFound);
+        log.info("Room successfully updated");
         return ResponseDTO.<Void>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Room successfully updated")
                 .success(true)
                 .build();
@@ -79,15 +95,16 @@ public class RoomServiceImpl implements RoomService {
             int start = pageable.getPageSize() * pageable.getPageNumber();
             int end = Math.min(start + pageable.getPageSize(), list.size());
             List<RoomCreateDTO> outputRooms = list.subList(start, end);
+            log.info("Room list successfully found pageable");
             return ResponseDTO.<List<RoomCreateDTO>>builder()
-                    .code(200)
+                    .code(HttpStatus.OK.value())
                     .message("Room list successfully found pageable")
                     .success(true)
                     .data(outputRooms)
                     .build();
         }
         return ResponseDTO.<List<RoomCreateDTO>>builder()
-                .code(404)
+                .code(HttpStatus.NOT_FOUND.value())
                 .message("Room list not found pageable")
                 .success(false)
                 .build();

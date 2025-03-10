@@ -1,6 +1,8 @@
 package uz.pdp.hotel_management_system.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.HotelCreateDTO;
 import uz.pdp.hotel_management_system.dto.ResponseDTO;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HotelServiceImpl implements HotelService {
 
     private final HotelRepository hotelRepository;
@@ -27,8 +30,9 @@ public class HotelServiceImpl implements HotelService {
     public ResponseDTO<HotelCreateDTO> createHotel(HotelCreateDTO hotelCreateDTO) {
         Hotel hotel = hotelMapper.toEntity(hotelCreateDTO);
         hotelRepository.save(hotel);
+        log.info("Hotel successfully created");
         return ResponseDTO.<HotelCreateDTO>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Hotel successfully created")
                 .success(true)
                 .data(hotelMapper.toDto(hotel))
@@ -39,8 +43,9 @@ public class HotelServiceImpl implements HotelService {
     public ResponseDTO<HotelCreateDTO> getHotelById(Integer hotelId) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found: " + hotelId));
+        log.info("Hotel successfully found");
         return ResponseDTO.<HotelCreateDTO>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Hotel successfully found")
                 .success(true)
                 .data(hotelMapper.toDto(hotel))
@@ -50,9 +55,19 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public ResponseDTO<List<HotelCreateDTO>> getAllHotel() {
         List<Hotel> hotels = hotelRepository.findAll();
+        if (!hotels.isEmpty()) {
+            log.info("Hotel list successfully found");
+            return ResponseDTO.<List<HotelCreateDTO>>builder()
+                    .code(200)
+                    .message("Hotel list successfully found")
+                    .success(true)
+                    .data(hotels.stream().map(hotelMapper::toDto).toList())
+                    .build();
+        }
+        log.error("Hotel list not found");
         return ResponseDTO.<List<HotelCreateDTO>>builder()
-                .code(200)
-                .message("Hotel list successfully found")
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message("Hotel list not found")
                 .success(true)
                 .data(hotels.stream().map(hotelMapper::toDto).toList())
                 .build();
@@ -68,8 +83,9 @@ public class HotelServiceImpl implements HotelService {
         hotelFound.setCity(hotel.getCity());
         hotelFound.setPhoneNumber(hotel.getPhoneNumber());
         hotelRepository.save(hotelFound);
+        log.info("Hotel successfully updated");
         return ResponseDTO.<Void>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Hotel successfully updated")
                 .success(true)
                 .build();
@@ -82,8 +98,9 @@ public class HotelServiceImpl implements HotelService {
         System.out.println("hotel = " + hotel);
         roomRepository.deleteRoomByHotelId(hotel.getId());
         hotelRepository.delete(hotel);
+        log.info("Hotel successfully updated");
         return ResponseDTO.<Void>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Hotel successfully deleted")
                 .success(true)
                 .build();
@@ -97,15 +114,16 @@ public class HotelServiceImpl implements HotelService {
             int start = pageable.getPageNumber() * pageable.getPageSize();
             int end = Math.min(start + pageable.getPageSize(), list.size());
             List<HotelCreateDTO> outputHotels = list.subList(start, end);
+            log.info("Hotel list successfully found pageable");
             return ResponseDTO.<List<HotelCreateDTO>>builder()
-                    .code(200)
+                    .code(HttpStatus.OK.value())
                     .message("Hotel list successfully found pageable")
                     .success(true)
                     .data(outputHotels)
                     .build();
         }
         return ResponseDTO.<List<HotelCreateDTO>>builder()
-                .code(404)
+                .code(HttpStatus.NOT_FOUND.value())
                 .message("Hotel list not found pageable")
                 .success(false)
                 .build();

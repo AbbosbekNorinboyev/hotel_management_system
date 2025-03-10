@@ -1,7 +1,9 @@
 package uz.pdp.hotel_management_system.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.OrderCreateDTO;
 import uz.pdp.hotel_management_system.dto.ResponseDTO;
@@ -19,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrdersRepository ordersRepository;
@@ -36,8 +39,9 @@ public class OrderServiceImpl implements OrderService {
         order.setAuthUser(authUser);
         order.setRoom(room);
         ordersRepository.save(order);
+        log.info("Order successfully created");
         return ResponseDTO.<OrderCreateDTO>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Order successfully created")
                 .success(true)
                 .data(orderMapper.toDto(order))
@@ -48,8 +52,9 @@ public class OrderServiceImpl implements OrderService {
     public ResponseDTO<OrderCreateDTO> getOrderById(Integer orderId) {
         Orders order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
+        log.info("Order successfully found");
         return ResponseDTO.<OrderCreateDTO>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Order successfully found")
                 .success(true)
                 .data(orderMapper.toDto(order))
@@ -59,10 +64,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ResponseDTO<List<OrderCreateDTO>> getAllOrder() {
         List<Orders> orders = ordersRepository.findAll();
+        if (!orders.isEmpty()) {
+            log.info("Order list successfully created");
+            return ResponseDTO.<List<OrderCreateDTO>>builder()
+                    .code(HttpStatus.OK.value())
+                    .message("Order list successfully found")
+                    .success(true)
+                    .data(orders.stream().map(orderMapper::toDto).toList())
+                    .build();
+        }
         return ResponseDTO.<List<OrderCreateDTO>>builder()
-                .code(200)
-                .message("Order list successfully found")
-                .success(true)
+                .code(HttpStatus.OK.value())
+                .message("Order list not found")
+                .success(false)
                 .data(orders.stream().map(orderMapper::toDto).toList())
                 .build();
     }
@@ -71,9 +85,10 @@ public class OrderServiceImpl implements OrderService {
     public ResponseDTO<Void> deleteOrderById(Integer orderId) {
         Orders order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order npt found: " + orderId));
+        log.info("Order successfully deleted");
         ordersRepository.delete(order);
         return ResponseDTO.<Void>builder()
-                .code(200)
+                .code(HttpStatus.OK.value())
                 .message("Oder successfully deleted")
                 .success(true)
                 .build();
@@ -82,22 +97,21 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public ResponseDTO<List<OrderCreateDTO>> getAllOrderPage(Pageable pageable) {
         List<Orders> orders = ordersRepository.findAll();
-        System.out.println("orders = " + orders);
         if (!orders.isEmpty()) {
             List<OrderCreateDTO> orderList = orders.stream().map(orderMapper::toDto).toList();
             int start = pageable.getPageNumber() * pageable.getPageSize();
             int end = Math.min(start + pageable.getPageSize(), orderList.size());
             List<OrderCreateDTO> outputOrders = orderList.subList(start, end);
-            System.out.println("outputOrders = " + outputOrders);
+            log.info("Order list successfully found pageable");
             return ResponseDTO.<List<OrderCreateDTO>>builder()
-                    .code(200)
-                    .message("Oder list successfully found")
+                    .code(HttpStatus.OK.value())
+                    .message("Oder list successfully found pageable")
                     .success(true)
                     .data(outputOrders)
                     .build();
         }
         return ResponseDTO.<List<OrderCreateDTO>>builder()
-                .code(404)
+                .code(HttpStatus.NOT_FOUND.value())
                 .message("Oder list not found pageable")
                 .success(false)
                 .build();

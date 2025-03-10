@@ -1,4 +1,4 @@
-package uz.pdp.hotel_management_system.schedule;
+package uz.pdp.hotel_management_system.cron;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

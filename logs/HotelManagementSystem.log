@@ -1,0 +1,5 @@
+2025-03-10 16:41:26 [scheduling-1] INFO  u.p.h.cron.LogCleanup - ✅ Log fayli tozalandi: C:\Abbos\Spring Project\Test Projects\HotelManagementSystem\logs\HotelManagementSystem.log
+2025-03-10 16:41:26 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-03-10 16:41:26 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-03-10 16:41:26 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-03-10 16:41:26 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
