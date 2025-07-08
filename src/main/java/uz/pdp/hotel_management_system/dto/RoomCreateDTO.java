@@ -1,8 +1,8 @@
 package uz.pdp.hotel_management_system.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
-import uz.pdp.hotel_management_system.entity.Hotel;
 import uz.pdp.hotel_management_system.enums.RoomState;
 
 @NoArgsConstructor

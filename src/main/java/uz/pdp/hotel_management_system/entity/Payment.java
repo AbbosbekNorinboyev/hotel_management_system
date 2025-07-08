@@ -3,7 +3,6 @@ package uz.pdp.hotel_management_system.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import uz.pdp.hotel_management_system.enums.PaymentType;
-import uz.pdp.hotel_management_system.enums.RoomState;
 
 import java.time.LocalDateTime;
 @Entity
