@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.dto.PaymentCreateDTO;
 import uz.pdp.hotel_management_system.dto.ResponseDTO;
+import uz.pdp.hotel_management_system.service.PaymentService;
 import uz.pdp.hotel_management_system.service.impl.PaymentServiceImpl;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/payments")
 @RequiredArgsConstructor
 public class PaymentController {
-    private final PaymentServiceImpl paymentService;
+    private final PaymentService paymentService;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")

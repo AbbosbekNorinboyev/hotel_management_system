@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.dto.OrderCreateDTO;
 import uz.pdp.hotel_management_system.dto.ResponseDTO;
+import uz.pdp.hotel_management_system.service.OrderService;
 import uz.pdp.hotel_management_system.service.impl.OrderServiceImpl;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
-    private final OrderServiceImpl orderService;
+    private final OrderService orderService;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
