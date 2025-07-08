@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.dto.OrderCreateDTO;
 import uz.pdp.hotel_management_system.dto.ResponseDTO;
 import uz.pdp.hotel_management_system.service.OrderService;
-import uz.pdp.hotel_management_system.service.impl.OrderServiceImpl;
 
 import java.util.List;
 
