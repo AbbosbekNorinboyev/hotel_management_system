@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.pdp.hotel_management_system.dto.ResponseDTO;
+import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 import uz.pdp.hotel_management_system.dto.RoomCreateDTO;
 import uz.pdp.hotel_management_system.entity.Room;
 import uz.pdp.hotel_management_system.exception.ResourceNotFoundException;

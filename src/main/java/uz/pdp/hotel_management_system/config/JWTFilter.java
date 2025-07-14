@@ -1,4 +1,4 @@
-package uz.pdp.hotel_management_system.filter;
+package uz.pdp.hotel_management_system.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

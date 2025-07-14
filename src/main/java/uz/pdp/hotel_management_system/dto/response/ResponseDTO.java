@@ -1,4 +1,4 @@
-package uz.pdp.hotel_management_system.dto;
+package uz.pdp.hotel_management_system.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -6,8 +6,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,6 +16,6 @@ public class ResponseDTO<T> {
     private String message;
     private boolean success;
     private T data;
-    private List<ErrorDTO> errors;
+    private List<ErrorResponse> errors;
     private HttpStatus httpStatus;
 }

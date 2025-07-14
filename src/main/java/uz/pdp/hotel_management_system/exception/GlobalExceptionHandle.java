@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import uz.pdp.hotel_management_system.dto.ErrorDTO;
-import uz.pdp.hotel_management_system.dto.ResponseDTO;
+import uz.pdp.hotel_management_system.dto.response.ErrorResponse;
+import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 
 import java.util.List;
 
@@ -14,14 +14,14 @@ import java.util.List;
 public class GlobalExceptionHandle {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDTO<Void>> exception(MethodArgumentNotValidException e) {
-        List<ErrorDTO> errors = e.getBindingResult()
+        List<ErrorResponse> errors = e.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(fieldError -> {
                     String field = fieldError.getField();
                     String defaultMessage = fieldError.getDefaultMessage();
                     String rejectedValue = String.valueOf(fieldError.getRejectedValue());
-                    return new ErrorDTO(
+                    return new ErrorResponse(
                             field,
                             String.format("defaultMessage: '%s', rejectedValue: '%s'", defaultMessage, rejectedValue)
                     );
