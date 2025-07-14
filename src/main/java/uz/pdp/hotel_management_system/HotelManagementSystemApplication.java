@@ -22,3 +22,5 @@ public class HotelManagementSystemApplication {
 
 // username => abbos, password => 2210
 // username => husanboy, password => 2802
+
+// spring cloud gateway qilish, rate limiter qilish, api addressga qarasin, endpointga qarasin, redis

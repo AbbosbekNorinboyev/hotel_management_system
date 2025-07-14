@@ -1,0 +1,17 @@
+server:
+  port: 1173
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/project?currentSchema=hotel_management_system
+    username: postgres
+    password: 2210
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_schema: hotel_management_system
