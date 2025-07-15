@@ -1,5 +1,6 @@
 package uz.pdp.hotel_management_system.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ public class PaymentController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<PaymentCreateDTO> createPayment(@RequestBody PaymentCreateDTO paymentCreateDTO) {
+    public ResponseDTO<PaymentCreateDTO> createPayment(@Valid @RequestBody PaymentCreateDTO paymentCreateDTO) {
         return paymentService.createPayment(paymentCreateDTO);
     }
 

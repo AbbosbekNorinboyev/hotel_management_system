@@ -1,5 +1,6 @@
 package uz.pdp.hotel_management_system.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ public class OrderController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<OrderCreateDTO> createOrder(@RequestBody OrderCreateDTO orderCreateDTO) {
+    public ResponseDTO<OrderCreateDTO> createOrder(@Valid @RequestBody OrderCreateDTO orderCreateDTO) {
         return orderService.createOrder(orderCreateDTO);
     }
 

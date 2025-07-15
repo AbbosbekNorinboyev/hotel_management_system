@@ -1,5 +1,6 @@
 package uz.pdp.hotel_management_system.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,8 @@ public class RoomController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<RoomCreateDTO> createRoom(@RequestBody RoomCreateDTO roomCreateDTO) {
+    public ResponseDTO<RoomCreateDTO> createRoom(@Valid @RequestBody RoomCreateDTO roomCreateDTO) {
+        System.out.println("roomCreateDTO = " + roomCreateDTO);
         return roomService.createRoom(roomCreateDTO);
     }
 
@@ -35,7 +37,7 @@ public class RoomController {
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<Void> updateRoom(@RequestBody RoomCreateDTO roomCreateDTO, @RequestParam Integer roomId) {
+    public ResponseDTO<Void> updateRoom(@Valid @RequestBody RoomCreateDTO roomCreateDTO, @RequestParam Integer roomId) {
         return roomService.updateRoom(roomCreateDTO, roomId);
     }
 

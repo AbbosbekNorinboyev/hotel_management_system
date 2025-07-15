@@ -5,35 +5,36 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import uz.pdp.hotel_management_system.dto.response.Empty;
 import uz.pdp.hotel_management_system.dto.response.ErrorResponse;
+import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 
 import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandle {
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<ResponseDTO<Void>> exception(MethodArgumentNotValidException e) {
-//        List<ErrorResponse> errors = e.getBindingResult()
-//                .getFieldErrors()
-//                .stream()
-//                .map(fieldError -> {
-//                    String field = fieldError.getField();
-//                    String defaultMessage = fieldError.getDefaultMessage();
-//                    String rejectedValue = String.valueOf(fieldError.getRejectedValue());
-//                    return new ErrorResponse(
-//                            field,
-//                            String.format("defaultMessage: '%s', rejectedValue: '%s'", defaultMessage, rejectedValue)
-//                    );
-//                }).toList();
-//        ResponseDTO<Void> response = ResponseDTO.<Void>builder()
-//                .code(HttpStatus.BAD_REQUEST.value())  // Bad request kodi
-//                .message("Validation error")
-//                .errors(errors)
-//                .success(false)
-//                .build();
-//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-//    }
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> exception(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors()
+                .stream().map(fieldError -> fieldError.getField() + " " + fieldError.getDefaultMessage()).toList();
+        StringBuilder sb = new StringBuilder();
+        errors.forEach(s -> sb.append(s).append(System.lineSeparator()));
+        String errorMessage = !sb.toString().isEmpty() ? sb.toString() : ex.getMessage();
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(errorMessage)
+                .build();
+
+        Response responseData = Response.builder()
+                .success(false)
+                .error(errorResponse)
+                .done(Empty.builder().build())
+                .build();
+        return new ResponseEntity<>(responseData, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseDTO<Void> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
         return ResponseDTO.<Void>builder()
