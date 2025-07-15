@@ -12,29 +12,28 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandle {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ResponseDTO<Void>> exception(MethodArgumentNotValidException e) {
-        List<ErrorResponse> errors = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(fieldError -> {
-                    String field = fieldError.getField();
-                    String defaultMessage = fieldError.getDefaultMessage();
-                    String rejectedValue = String.valueOf(fieldError.getRejectedValue());
-                    return new ErrorResponse(
-                            field,
-                            String.format("defaultMessage: '%s', rejectedValue: '%s'", defaultMessage, rejectedValue)
-                    );
-                }).toList();
-        ResponseDTO<Void> response = ResponseDTO.<Void>builder()
-                .code(HttpStatus.BAD_REQUEST.value())  // Bad request kodi
-                .message("Validation error")
-                .errors(errors)
-                .success(false)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<ResponseDTO<Void>> exception(MethodArgumentNotValidException e) {
+//        List<ErrorResponse> errors = e.getBindingResult()
+//                .getFieldErrors()
+//                .stream()
+//                .map(fieldError -> {
+//                    String field = fieldError.getField();
+//                    String defaultMessage = fieldError.getDefaultMessage();
+//                    String rejectedValue = String.valueOf(fieldError.getRejectedValue());
+//                    return new ErrorResponse(
+//                            field,
+//                            String.format("defaultMessage: '%s', rejectedValue: '%s'", defaultMessage, rejectedValue)
+//                    );
+//                }).toList();
+//        ResponseDTO<Void> response = ResponseDTO.<Void>builder()
+//                .code(HttpStatus.BAD_REQUEST.value())  // Bad request kodi
+//                .message("Validation error")
+//                .errors(errors)
+//                .success(false)
+//                .build();
+//        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+//    }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseDTO<Void> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
         return ResponseDTO.<Void>builder()

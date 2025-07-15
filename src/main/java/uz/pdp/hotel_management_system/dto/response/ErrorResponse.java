@@ -11,7 +11,7 @@ import lombok.*;
 @JsonPropertyOrder({"code","message"})
 public class ErrorResponse {
     @JsonProperty("code")
-    private String code;
+    private Integer code;
     @JsonProperty("message")
     private String message;
 }

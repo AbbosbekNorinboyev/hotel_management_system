@@ -14,4 +14,3 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        default_schema: hotel_management_system
