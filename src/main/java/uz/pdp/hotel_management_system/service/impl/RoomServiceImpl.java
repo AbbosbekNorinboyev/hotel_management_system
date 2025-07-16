@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.RoomCreateDTO;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Room;
-import uz.pdp.hotel_management_system.exception.ResourceNotFoundException;
+import uz.pdp.hotel_management_system.exception.CustomException;
 import uz.pdp.hotel_management_system.mapper.RoomMapper;
 import uz.pdp.hotel_management_system.repository.RoomRepository;
 import uz.pdp.hotel_management_system.service.RoomService;
@@ -38,7 +38,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Response getRoomById(Integer roomId) {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found: " + roomId));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + roomId));
         log.info("Room successfully found");
         return Response.builder()
                 .code(HttpStatus.OK.value())
@@ -72,7 +72,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Response updateRoom(RoomCreateDTO roomCreateDTO, Integer roomId) {
         Room roomFound = roomRepository.findById(roomId)
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found: " + roomId));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + roomId));
         roomFound.setNumber(roomCreateDTO.getNumber());
         roomFound.setNumberOfPeople(roomCreateDTO.getNumberOfPeople());
         roomFound.setPrice(roomCreateDTO.getPrice());

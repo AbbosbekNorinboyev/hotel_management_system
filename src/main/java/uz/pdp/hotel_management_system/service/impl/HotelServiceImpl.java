@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.HotelCreateDTO;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Hotel;
-import uz.pdp.hotel_management_system.exception.ResourceNotFoundException;
+import uz.pdp.hotel_management_system.exception.CustomException;
 import uz.pdp.hotel_management_system.mapper.HotelMapper;
 import uz.pdp.hotel_management_system.repository.HotelRepository;
 import uz.pdp.hotel_management_system.repository.RoomRepository;
@@ -41,7 +41,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public Response getHotelById(Integer hotelId) {
         Hotel hotel = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found: " + hotelId));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelId));
         log.info("Hotel successfully found");
         return Response.builder()
                 .code(HttpStatus.OK.value())
@@ -75,7 +75,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public Response updateHotel(HotelCreateDTO hotelCreateDTO, Integer hotelId) {
         Hotel hotelFound = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found: " + hotelId));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelId));
         Hotel hotel = hotelMapper.toEntity(hotelCreateDTO);
         hotelFound.setName(hotel.getName());
         hotelFound.setAddress(hotel.getAddress());
@@ -93,7 +93,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public Response deleteHotelById(Integer hotelId) {
         Hotel hotel = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found: " + hotelId));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelId));
         System.out.println("hotel = " + hotel);
         roomRepository.deleteRoomByHotelId(hotel.getId());
         hotelRepository.delete(hotel);

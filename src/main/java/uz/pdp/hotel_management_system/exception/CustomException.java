@@ -1,9 +1,11 @@
 package uz.pdp.hotel_management_system.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatusCode;
 
+@Getter
 public class CustomException extends RuntimeException {
-    private final Integer code;
+    private final int code;
     private final String message;
 
     public CustomException(HttpStatusCode httpStatusCode, String message) {

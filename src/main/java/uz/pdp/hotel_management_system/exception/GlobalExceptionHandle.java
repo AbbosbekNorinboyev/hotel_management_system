@@ -1,5 +1,6 @@
 package uz.pdp.hotel_management_system.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,6 +13,7 @@ import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandle {
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -42,6 +44,22 @@ public class GlobalExceptionHandle {
                 .message(resourceNotFoundException.getMessage())
                 .success(false)
                 .build();
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<?> handleGeneralCustomExceptions(CustomException ex) {
+        log.error("ErrorStatus: {}, Message: {} ", ex.getCode(), ex.getMessage());
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code(ex.getCode())
+                .message("Something wrong -> " + ex.getMessage())
+                .build();
+
+        var response = Response.builder()
+                .success(false)
+                .error(errorResponse)
+                .data(Empty.builder().build())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(Exception.class)

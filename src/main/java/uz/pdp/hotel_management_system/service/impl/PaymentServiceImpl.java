@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.PaymentCreateDTO;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Payment;
-import uz.pdp.hotel_management_system.exception.ResourceNotFoundException;
+import uz.pdp.hotel_management_system.exception.CustomException;
 import uz.pdp.hotel_management_system.mapper.PaymentMapper;
 import uz.pdp.hotel_management_system.repository.PaymentRepository;
 import uz.pdp.hotel_management_system.service.PaymentService;
@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Response getPayment(Integer paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Payment not found: " + paymentId));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Payment not found: " + paymentId));
         log.info("Payment successfully found");
         return Response.builder()
                 .code(HttpStatus.OK.value())

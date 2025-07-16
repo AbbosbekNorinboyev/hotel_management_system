@@ -10,7 +10,7 @@ import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.AuthUser;
 import uz.pdp.hotel_management_system.entity.Orders;
 import uz.pdp.hotel_management_system.entity.Room;
-import uz.pdp.hotel_management_system.exception.ResourceNotFoundException;
+import uz.pdp.hotel_management_system.exception.CustomException;
 import uz.pdp.hotel_management_system.mapper.OrderMapper;
 import uz.pdp.hotel_management_system.repository.AuthUserRepository;
 import uz.pdp.hotel_management_system.repository.OrdersRepository;
@@ -33,9 +33,9 @@ public class OrderServiceImpl implements OrderService {
     public Response createOrder(OrderCreateDTO orderCreateDTO) {
         Orders order = orderMapper.toEntity(orderCreateDTO);
         AuthUser authUser = authUserRepository.findById(order.getAuthUser().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("AuthUser not found: " + order.getAuthUser().getId()));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "AuthUser not found: " + order.getAuthUser().getId()));
         Room room = roomRepository.findById(order.getRoom().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Room not found: " + order.getRoom().getId()));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + order.getRoom().getId()));
         order.setAuthUser(authUser);
         order.setRoom(room);
         ordersRepository.save(order);
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Response getOrderById(Integer orderId) {
         Orders order = ordersRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found: " + orderId));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Order not found: " + orderId));
         log.info("Order successfully found");
         return Response.builder()
                 .code(HttpStatus.OK.value())
@@ -84,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Response deleteOrderById(Integer orderId) {
         Orders order = ordersRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order npt found: " + orderId));
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Order npt found: " + orderId));
         log.info("Order successfully deleted");
         ordersRepository.delete(order);
         return Response.builder()
