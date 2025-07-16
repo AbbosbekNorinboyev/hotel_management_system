@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.PaymentCreateDTO;
+import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 import uz.pdp.hotel_management_system.entity.Payment;
 import uz.pdp.hotel_management_system.exception.ResourceNotFoundException;
@@ -23,11 +24,11 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    public ResponseDTO<PaymentCreateDTO> createPayment(PaymentCreateDTO paymentCreateDTO) {
+    public Response createPayment(PaymentCreateDTO paymentCreateDTO) {
         Payment payment = paymentMapper.toEntity(paymentCreateDTO);
         paymentRepository.save(payment);
         log.info("Payment successfully created");
-        return ResponseDTO.<PaymentCreateDTO>builder()
+        return Response.builder()
                 .code(HttpStatus.OK.value())
                 .message("Payment successfully created")
                 .success(true)
@@ -36,11 +37,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseDTO<PaymentCreateDTO> getPayment(Integer paymentId) {
+    public Response getPayment(Integer paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment not found: " + paymentId));
         log.info("Payment successfully found");
-        return ResponseDTO.<PaymentCreateDTO>builder()
+        return Response.builder()
                 .code(HttpStatus.OK.value())
                 .message("Payment successfully found")
                 .success(true)
@@ -49,11 +50,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseDTO<List<PaymentCreateDTO>> getAllPayment() {
+    public Response getAllPayment() {
         List<Payment> payments = paymentRepository.findAll();
         if (!payments.isEmpty()) {
             log.info("Payment list successfully found");
-            return ResponseDTO.<List<PaymentCreateDTO>>builder()
+            return Response.builder()
                     .code(HttpStatus.OK.value())
                     .message("Payment list successfully found")
                     .success(true)
@@ -61,7 +62,7 @@ public class PaymentServiceImpl implements PaymentService {
                     .build();
         }
         log.error("Payment list not found");
-        return ResponseDTO.<List<PaymentCreateDTO>>builder()
+        return Response.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .message("Payment list not found")
                 .success(true)
@@ -70,7 +71,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseDTO<List<PaymentCreateDTO>> getAllPaymentPage(Pageable pageable) {
+    public Response getAllPaymentPage(Pageable pageable) {
         List<Payment> payments = paymentRepository.findAll();
         if (!payments.isEmpty()) {
             List<PaymentCreateDTO> paymentList = payments.stream().map(paymentMapper::toDto).toList();
@@ -78,14 +79,14 @@ public class PaymentServiceImpl implements PaymentService {
             int end = Math.min(start + pageable.getPageSize(), paymentList.size());
             List<PaymentCreateDTO> outputPayments = paymentList.subList(start, end);
             log.info("Payment list successfully found pageable");
-            return ResponseDTO.<List<PaymentCreateDTO>>builder()
+            return Response.builder()
                     .code(HttpStatus.OK.value())
                     .message("Payment list successfully found pageable")
                     .success(true)
                     .data(outputPayments)
                     .build();
         }
-        return ResponseDTO.<List<PaymentCreateDTO>>builder()
+        return Response.builder()
                 .code(HttpStatus.NOT_FOUND.value())
                 .message("Payment list not found pageable")
                 .success(false)

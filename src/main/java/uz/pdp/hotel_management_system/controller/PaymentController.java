@@ -7,10 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.dto.PaymentCreateDTO;
-import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
+import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.service.PaymentService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/payments")
@@ -20,23 +18,23 @@ public class PaymentController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<PaymentCreateDTO> createPayment(@Valid @RequestBody PaymentCreateDTO paymentCreateDTO) {
+    public Response createPayment(@Valid @RequestBody PaymentCreateDTO paymentCreateDTO) {
         return paymentService.createPayment(paymentCreateDTO);
     }
 
     @GetMapping("/{paymentId}")
-    public ResponseDTO<PaymentCreateDTO> getPayment(@PathVariable Integer paymentId) {
+    public Response getPayment(@PathVariable Integer paymentId) {
         return paymentService.getPayment(paymentId);
     }
 
     @GetMapping
-    public ResponseDTO<List<PaymentCreateDTO>> getAllPayment() {
+    public Response getAllPayment() {
         return paymentService.getAllPayment();
     }
 
     @GetMapping("/page")
-    public ResponseDTO<List<PaymentCreateDTO>> getAllPaymentPage(@RequestParam(defaultValue = "0") Integer page,
-                                                                 @RequestParam(defaultValue = "10") Integer size) {
+    public Response getAllPaymentPage(@RequestParam(defaultValue = "0") Integer page,
+                                      @RequestParam(defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return paymentService.getAllPaymentPage(pageable);
     }
