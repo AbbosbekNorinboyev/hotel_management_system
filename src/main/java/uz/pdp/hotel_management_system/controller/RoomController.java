@@ -6,11 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 import uz.pdp.hotel_management_system.dto.RoomCreateDTO;
+import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.service.RoomService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/rooms")
@@ -20,30 +18,30 @@ public class RoomController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<RoomCreateDTO> createRoom(@Valid @RequestBody RoomCreateDTO roomCreateDTO) {
+    public Response createRoom(@Valid @RequestBody RoomCreateDTO roomCreateDTO) {
         System.out.println("roomCreateDTO = " + roomCreateDTO);
         return roomService.createRoom(roomCreateDTO);
     }
 
     @GetMapping("/{roomId}")
-    public ResponseDTO<RoomCreateDTO> getRoom(@PathVariable Integer roomId) {
+    public Response getRoom(@PathVariable Integer roomId) {
         return roomService.getRoomById(roomId);
     }
 
     @GetMapping
-    public ResponseDTO<List<RoomCreateDTO>> getAllRoom() {
+    public Response getAllRoom() {
         return roomService.getAllRoom();
     }
 
     @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<Void> updateRoom(@Valid @RequestBody RoomCreateDTO roomCreateDTO, @RequestParam Integer roomId) {
+    public Response updateRoom(@Valid @RequestBody RoomCreateDTO roomCreateDTO, @RequestParam Integer roomId) {
         return roomService.updateRoom(roomCreateDTO, roomId);
     }
 
     @GetMapping("/page")
-    public ResponseDTO<List<RoomCreateDTO>> getAllRoomPage(@RequestParam(defaultValue = "0") Integer page,
-                                                           @RequestParam(defaultValue = "1") Integer size) {
+    public Response getAllRoomPage(@RequestParam(defaultValue = "0") Integer page,
+                                   @RequestParam(defaultValue = "1") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return roomService.getAllRoomPage(pageable);
     }

@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import uz.pdp.hotel_management_system.security.CustomUserDetailsService;
 import uz.pdp.hotel_management_system.utils.JWTUtils;
 
 import java.io.IOException;
@@ -21,21 +20,9 @@ import java.io.IOException;
  */
 @Component
 @RequiredArgsConstructor
-public class JWTFilter extends OncePerRequestFilter {
+public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JWTUtils jwtUtils;
     private final CustomUserDetailsService customUserDetailsService;
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String path = request.getRequestURI();
-        return path.startsWith("/swagger-ui/**") || path.startsWith("/swagger-ui.html")
-                || path.startsWith("/v3/api-docs/**") || path.startsWith("/api/auth/**")
-                || path.startsWith("/webjars/**") || path.startsWith("/api/hotels/create")
-                || path.startsWith("/api/hotels/update") || path.startsWith("/api/hotels/delete")
-                || path.startsWith("/api/rooms/create") || path.startsWith("/api/rooms/update")
-                || path.startsWith("/api/payments/create") || path.startsWith("/api/orders/create")
-                || path.startsWith("/api/orders/delete/");
-    }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,

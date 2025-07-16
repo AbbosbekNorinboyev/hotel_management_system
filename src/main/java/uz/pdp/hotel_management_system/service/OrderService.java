@@ -8,8 +8,12 @@ import java.util.List;
 
 public interface OrderService {
     ResponseDTO<OrderCreateDTO> createOrder(OrderCreateDTO orderCreateDTO);
+
     ResponseDTO<OrderCreateDTO> getOrderById(Integer orderId);
+
     ResponseDTO<List<OrderCreateDTO>> getAllOrder();
+
     ResponseDTO<Void> deleteOrderById(Integer orderId);
+
     ResponseDTO<List<OrderCreateDTO>> getAllOrderPage(Pageable pageable);
 }

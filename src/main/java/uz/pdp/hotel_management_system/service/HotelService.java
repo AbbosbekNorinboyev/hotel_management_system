@@ -1,9 +1,8 @@
 package uz.pdp.hotel_management_system.service;
 
+import org.springframework.data.domain.Pageable;
 import uz.pdp.hotel_management_system.dto.HotelCreateDTO;
 import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
-
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

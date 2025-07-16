@@ -1,4 +1,4 @@
-package uz.pdp.hotel_management_system.security;
+package uz.pdp.hotel_management_system.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

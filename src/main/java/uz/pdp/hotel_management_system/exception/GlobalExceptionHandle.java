@@ -30,7 +30,7 @@ public class GlobalExceptionHandle {
         Response responseData = Response.builder()
                 .success(false)
                 .error(errorResponse)
-                .done(Empty.builder().build())
+                .data(Empty.builder().build())
                 .build();
         return new ResponseEntity<>(responseData, HttpStatus.BAD_REQUEST);
     }

@@ -1,6 +1,5 @@
 package uz.pdp.hotel_management_system.exception;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 public class CustomException extends RuntimeException {

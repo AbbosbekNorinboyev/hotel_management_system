@@ -1,16 +1,17 @@
 package uz.pdp.hotel_management_system.service;
 
 import org.springframework.data.domain.Pageable;
-import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 import uz.pdp.hotel_management_system.dto.RoomCreateDTO;
+import uz.pdp.hotel_management_system.dto.response.Response;
+import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 
 import java.util.List;
 
 
 public interface RoomService {
-    ResponseDTO<RoomCreateDTO> createRoom(RoomCreateDTO roomCreateDTO);
-    ResponseDTO<RoomCreateDTO> getRoomById(Integer roomId);
-    ResponseDTO<List<RoomCreateDTO>> getAllRoom();
-    ResponseDTO<Void> updateRoom(RoomCreateDTO roomCreateDTO, Integer roomId);
-    ResponseDTO<List<RoomCreateDTO>> getAllRoomPage(Pageable pageable);
+    Response createRoom(RoomCreateDTO roomCreateDTO);
+    Response getRoomById(Integer roomId);
+    Response getAllRoom();
+    Response updateRoom(RoomCreateDTO roomCreateDTO, Integer roomId);
+    Response getAllRoomPage(Pageable pageable);
 }
