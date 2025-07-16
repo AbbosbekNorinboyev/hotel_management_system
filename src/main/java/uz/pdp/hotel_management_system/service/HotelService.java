@@ -2,21 +2,19 @@ package uz.pdp.hotel_management_system.service;
 
 import org.springframework.data.domain.Pageable;
 import uz.pdp.hotel_management_system.dto.HotelCreateDTO;
-import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
-
-import java.util.List;
+import uz.pdp.hotel_management_system.dto.response.Response;
 
 public interface HotelService {
-    ResponseDTO<HotelCreateDTO> createHotel(HotelCreateDTO hotelCreateDTO);
+    Response createHotel(HotelCreateDTO hotelCreateDTO);
 
-    ResponseDTO<HotelCreateDTO> getHotelById(Integer hotelId);
+    Response getHotelById(Integer hotelId);
 
-    ResponseDTO<List<HotelCreateDTO>> getAllHotel();
+    Response getAllHotel();
 
-    ResponseDTO<Void> updateHotel(HotelCreateDTO hotelCreateDTO, Integer hotelId);
+    Response updateHotel(HotelCreateDTO hotelCreateDTO, Integer hotelId);
 
-    ResponseDTO<Void> deleteHotelById(Integer hotelId);
+    Response deleteHotelById(Integer hotelId);
 
-    ResponseDTO<List<HotelCreateDTO>> getAllHotelPage(Pageable pageable);
+    Response getAllHotelPage(Pageable pageable);
 
 }

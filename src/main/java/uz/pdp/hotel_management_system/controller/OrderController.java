@@ -7,10 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.dto.OrderCreateDTO;
-import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
+import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.service.OrderService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -20,29 +18,29 @@ public class OrderController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<OrderCreateDTO> createOrder(@Valid @RequestBody OrderCreateDTO orderCreateDTO) {
+    public Response createOrder(@Valid @RequestBody OrderCreateDTO orderCreateDTO) {
         return orderService.createOrder(orderCreateDTO);
     }
 
     @GetMapping("/{orderId}")
-    public ResponseDTO<OrderCreateDTO> getOrder(@PathVariable Integer orderId) {
+    public Response getOrder(@PathVariable Integer orderId) {
         return orderService.getOrderById(orderId);
     }
 
     @GetMapping
-    public ResponseDTO<List<OrderCreateDTO>> getAllOrder() {
+    public Response getAllOrder() {
         return orderService.getAllOrder();
     }
 
     @DeleteMapping("/delete/{orderId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDTO<Void> deleteOrder(@PathVariable Integer orderId) {
+    public Response deleteOrder(@PathVariable Integer orderId) {
         return orderService.deleteOrderById(orderId);
     }
 
     @GetMapping("/page")
-    public ResponseDTO<List<OrderCreateDTO>> getAllOrderPage(@RequestParam(defaultValue = "0") Integer page,
-                                                             @RequestParam(defaultValue = "10") Integer size) {
+    public Response getAllOrderPage(@RequestParam(defaultValue = "0") Integer page,
+                                    @RequestParam(defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return orderService.getAllOrderPage(pageable);
     }
