@@ -20,27 +20,27 @@ public class HotelController {
         return hotelService.createHotel(hotelDto);
     }
 
-    @GetMapping("/{hotelId}")
-    public Response getHotel(@PathVariable Integer hotelId) {
+    @GetMapping("/get")
+    public Response getHotel(@RequestParam("hotelId") Integer hotelId) {
         return hotelService.getHotelById(hotelId);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public Response getAllHotel() {
         return hotelService.getAllHotel();
     }
 
-    @PutMapping("/update/{hotelId}")
-    public Response updateHotel(@Valid @RequestBody HotelDto hotelDto, @PathVariable Integer hotelId) {
-        return hotelService.updateHotel(hotelDto, hotelId);
+    @PutMapping("/update")
+    public Response updateHotel(@Valid @RequestBody HotelDto hotelDto) {
+        return hotelService.updateHotel(hotelDto);
     }
 
-    @DeleteMapping("/delete/{hotelId}")
-    public Response deleteHotel(@PathVariable Integer hotelId) {
+    @DeleteMapping("/delete")
+    public Response deleteHotel(@RequestParam("hotelId") Integer hotelId) {
         return hotelService.deleteHotelById(hotelId);
     }
 
-    @GetMapping("/page")
+    @GetMapping("/getAll/page")
     public Response getAllHotelPage(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                     @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);

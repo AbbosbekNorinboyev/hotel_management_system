@@ -51,4 +51,25 @@ public class RoomMapper {
         }
         return new ArrayList<>();
     }
+
+    public void update(Room entity, RoomDto roomDto) {
+        if (roomDto == null) {
+            return;
+        }
+        if (roomDto.getNumber() != null) {
+            entity.setNumber(roomDto.getNumber());
+        }
+        if (roomDto.getNumberOfPeople() != null) {
+            entity.setNumberOfPeople(roomDto.getNumberOfPeople());
+        }
+        if (roomDto.getPrice() != null) {
+            entity.setPrice(roomDto.getPrice());
+        }
+        if (roomDto.getStatus() != null) {
+            entity.setStatus(roomDto.getStatus());
+        }
+        if (roomDto.getState() != null) {
+            entity.setState(roomDto.getState());
+        }
+    }
 }

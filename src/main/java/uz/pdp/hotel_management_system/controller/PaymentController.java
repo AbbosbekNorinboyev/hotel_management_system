@@ -20,17 +20,17 @@ public class PaymentController {
         return paymentService.createPayment(paymentDto);
     }
 
-    @GetMapping("/{paymentId}")
-    public Response getPayment(@PathVariable Integer paymentId) {
+    @GetMapping("/get")
+    public Response getPayment(@RequestParam("paymentId") Integer paymentId) {
         return paymentService.getPayment(paymentId);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public Response getAllPayment() {
         return paymentService.getAllPayment();
     }
 
-    @GetMapping("/page")
+    @GetMapping("/getAll/page")
     public Response getAllPaymentPage(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                       @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);

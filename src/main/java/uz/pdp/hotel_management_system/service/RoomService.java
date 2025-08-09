@@ -12,7 +12,7 @@ public interface RoomService {
 
     Response getAllRoom();
 
-    Response updateRoom(RoomDto roomDto, Integer roomId);
+    Response updateRoom(RoomDto roomDto);
 
     Response getAllRoomPage(Pageable pageable);
 }

@@ -69,14 +69,10 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Response updateRoom(RoomDto roomDto, Integer roomId) {
-        Room roomFound = roomRepository.findById(roomId)
-                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + roomId));
-        roomFound.setNumber(roomDto.getNumber());
-        roomFound.setNumberOfPeople(roomDto.getNumberOfPeople());
-        roomFound.setPrice(roomDto.getPrice());
-        roomFound.setStatus(roomDto.getStatus());
-        roomFound.setState(roomDto.getState());
+    public Response updateRoom(RoomDto roomDto) {
+        Room roomFound = roomRepository.findById(roomDto.getId())
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + roomDto.getId()));
+        roomMapper.update(roomFound, roomDto);
         roomRepository.save(roomFound);
         log.info("Room successfully updated");
         return Response.builder()

@@ -20,22 +20,22 @@ public class RoomController {
         return roomService.createRoom(roomDto);
     }
 
-    @GetMapping("/{roomId}")
-    public Response getRoom(@PathVariable Integer roomId) {
+    @GetMapping("/get")
+    public Response getRoom(@RequestParam("roomId") Integer roomId) {
         return roomService.getRoomById(roomId);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public Response getAllRoom() {
         return roomService.getAllRoom();
     }
 
     @PutMapping("/update")
-    public Response updateRoom(@Valid @RequestBody RoomDto roomDto, @RequestParam Integer roomId) {
-        return roomService.updateRoom(roomDto, roomId);
+    public Response updateRoom(@Valid @RequestBody RoomDto roomDto) {
+        return roomService.updateRoom(roomDto);
     }
 
-    @GetMapping("/page")
+    @GetMapping("/getAll/page")
     public Response getAllRoomPage(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                    @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);

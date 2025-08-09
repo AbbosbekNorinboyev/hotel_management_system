@@ -12,7 +12,7 @@ public interface HotelService {
 
     Response getAllHotel();
 
-    Response updateHotel(HotelDto hotelDto, Integer hotelId);
+    Response updateHotel(HotelDto hotelDto);
 
     @Transactional
     Response deleteHotelById(Integer hotelId);

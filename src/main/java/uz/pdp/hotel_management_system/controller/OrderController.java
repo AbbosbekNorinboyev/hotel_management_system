@@ -20,22 +20,22 @@ public class OrderController {
         return orderService.createOrder(orderDto);
     }
 
-    @GetMapping("/{orderId}")
-    public Response getOrder(@PathVariable Integer orderId) {
+    @GetMapping("/get")
+    public Response getOrder(@RequestParam("orderId") Integer orderId) {
         return orderService.getOrderById(orderId);
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     public Response getAllOrder() {
         return orderService.getAllOrder();
     }
 
-    @DeleteMapping("/delete/{orderId}")
-    public Response deleteOrder(@PathVariable Integer orderId) {
+    @DeleteMapping("/delete")
+    public Response deleteOrder(@RequestParam("orderId") Integer orderId) {
         return orderService.deleteOrderById(orderId);
     }
 
-    @GetMapping("/page")
+    @GetMapping("/getAll/page")
     public Response getAllOrderPage(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                     @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);

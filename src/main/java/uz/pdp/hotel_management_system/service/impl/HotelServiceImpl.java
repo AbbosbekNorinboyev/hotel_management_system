@@ -72,14 +72,10 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public Response updateHotel(HotelDto hotelDto, Integer hotelId) {
-        Hotel hotelFound = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelId));
-        Hotel hotel = hotelMapper.toEntity(hotelDto);
-        hotelFound.setName(hotel.getName());
-        hotelFound.setAddress(hotel.getAddress());
-        hotelFound.setCity(hotel.getCity());
-        hotelFound.setPhoneNumber(hotel.getPhoneNumber());
+    public Response updateHotel(HotelDto hotelDto) {
+        Hotel hotelFound = hotelRepository.findById(hotelDto.getId())
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelDto.getId()));
+        hotelMapper.update(hotelFound, hotelDto);
         hotelRepository.save(hotelFound);
         log.info("Hotel successfully updated");
         return Response.builder()
