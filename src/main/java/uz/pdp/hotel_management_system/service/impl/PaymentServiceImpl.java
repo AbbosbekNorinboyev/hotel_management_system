@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.pdp.hotel_management_system.dto.PaymentCreateDTO;
+import uz.pdp.hotel_management_system.dto.PaymentDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Payment;
 import uz.pdp.hotel_management_system.exception.CustomException;
@@ -23,8 +23,8 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    public Response createPayment(PaymentCreateDTO paymentCreateDTO) {
-        Payment payment = paymentMapper.toEntity(paymentCreateDTO);
+    public Response createPayment(PaymentDto paymentDto) {
+        Payment payment = paymentMapper.toEntity(paymentDto);
         paymentRepository.save(payment);
         log.info("Payment successfully created");
         return Response.builder()
@@ -57,15 +57,14 @@ public class PaymentServiceImpl implements PaymentService {
                     .code(HttpStatus.OK.value())
                     .message("Payment list successfully found")
                     .success(true)
-                    .data(payments.stream().map(paymentMapper::toDto).toList())
+                    .data(paymentMapper.dtoList(payments))
                     .build();
         }
         log.error("Payment list not found");
         return Response.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .message("Payment list not found")
-                .success(true)
-                .data(payments.stream().map(paymentMapper::toDto).toList())
+                .success(false)
                 .build();
     }
 
@@ -73,10 +72,10 @@ public class PaymentServiceImpl implements PaymentService {
     public Response getAllPaymentPage(Pageable pageable) {
         List<Payment> payments = paymentRepository.findAll();
         if (!payments.isEmpty()) {
-            List<PaymentCreateDTO> paymentList = payments.stream().map(paymentMapper::toDto).toList();
+            List<PaymentDto> paymentList = payments.stream().map(paymentMapper::toDto).toList();
             int start = pageable.getPageSize() * pageable.getPageNumber();
             int end = Math.min(start + pageable.getPageSize(), paymentList.size());
-            List<PaymentCreateDTO> outputPayments = paymentList.subList(start, end);
+            List<PaymentDto> outputPayments = paymentList.subList(start, end);
             log.info("Payment list successfully found pageable");
             return Response.builder()
                     .code(HttpStatus.OK.value())

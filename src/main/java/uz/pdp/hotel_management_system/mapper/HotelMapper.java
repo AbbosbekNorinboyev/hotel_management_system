@@ -1,28 +1,38 @@
 package uz.pdp.hotel_management_system.mapper;
 
 import org.springframework.stereotype.Component;
-import uz.pdp.hotel_management_system.dto.HotelCreateDTO;
+import uz.pdp.hotel_management_system.dto.HotelDto;
 import uz.pdp.hotel_management_system.entity.Hotel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class HotelMapper {
-    public Hotel toEntity(HotelCreateDTO hotelCreateDTO) {
+    public Hotel toEntity(HotelDto hotelDto) {
         return Hotel.builder()
-                .id(hotelCreateDTO.getId())
-                .name(hotelCreateDTO.getName())
-                .address(hotelCreateDTO.getAddress())
-                .city(hotelCreateDTO.getCity())
-                .phoneNumber(hotelCreateDTO.getPhoneNumber())
+                .id(hotelDto.getId())
+                .name(hotelDto.getName())
+                .address(hotelDto.getAddress())
+                .city(hotelDto.getCity())
+                .phoneNumber(hotelDto.getPhoneNumber())
                 .build();
     }
 
-    public HotelCreateDTO toDto(Hotel hotel) {
-        return HotelCreateDTO.builder()
+    public HotelDto toDto(Hotel hotel) {
+        return HotelDto.builder()
                 .id(hotel.getId())
                 .name(hotel.getName())
                 .address(hotel.getAddress())
                 .city(hotel.getCity())
                 .phoneNumber(hotel.getPhoneNumber())
                 .build();
+    }
+
+    public List<HotelDto> dtoList(List<Hotel> hotels) {
+        if (hotels != null && !hotels.isEmpty()) {
+            return hotels.stream().map(this::toDto).toList();
+        }
+        return new ArrayList<>();
     }
 }

@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class HotelCreateDTO {
+public class HotelDto {
     private Integer id;
     @NotBlank(message = "name can not be null or empty")
     private String name;

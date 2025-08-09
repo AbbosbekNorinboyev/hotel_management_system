@@ -1,19 +1,18 @@
 package uz.pdp.hotel_management_system.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
-import uz.pdp.hotel_management_system.dto.OrderCreateDTO;
+import uz.pdp.hotel_management_system.dto.OrderDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
-import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
-
-import java.util.List;
 
 public interface OrderService {
-    Response createOrder(OrderCreateDTO orderCreateDTO);
+    Response createOrder(OrderDto orderDto);
 
     Response getOrderById(Integer orderId);
 
     Response getAllOrder();
 
+    @Transactional
     Response deleteOrderById(Integer orderId);
 
     Response getAllOrderPage(Pageable pageable);

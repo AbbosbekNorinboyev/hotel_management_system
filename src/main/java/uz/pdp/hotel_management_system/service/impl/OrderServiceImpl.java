@@ -1,11 +1,12 @@
 package uz.pdp.hotel_management_system.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.pdp.hotel_management_system.dto.OrderCreateDTO;
+import uz.pdp.hotel_management_system.dto.OrderDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.AuthUser;
 import uz.pdp.hotel_management_system.entity.Orders;
@@ -23,15 +24,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderServiceImpl implements OrderService {
-
     private final OrdersRepository ordersRepository;
     private final OrderMapper orderMapper;
     private final AuthUserRepository authUserRepository;
     private final RoomRepository roomRepository;
 
     @Override
-    public Response createOrder(OrderCreateDTO orderCreateDTO) {
-        Orders order = orderMapper.toEntity(orderCreateDTO);
+    public Response createOrder(OrderDto orderDto) {
+        Orders order = orderMapper.toEntity(orderDto);
         AuthUser authUser = authUserRepository.findById(order.getAuthUser().getId())
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "AuthUser not found: " + order.getAuthUser().getId()));
         Room room = roomRepository.findById(order.getRoom().getId())
@@ -70,17 +70,17 @@ public class OrderServiceImpl implements OrderService {
                     .code(HttpStatus.OK.value())
                     .message("Order list successfully found")
                     .success(true)
-                    .data(orders.stream().map(orderMapper::toDto).toList())
+                    .data(orderMapper.dtoList(orders))
                     .build();
         }
         return Response.builder()
                 .code(HttpStatus.OK.value())
                 .message("Order list not found")
                 .success(false)
-                .data(orders.stream().map(orderMapper::toDto).toList())
                 .build();
     }
 
+    @Transactional
     @Override
     public Response deleteOrderById(Integer orderId) {
         Orders order = ordersRepository.findById(orderId)
@@ -98,10 +98,10 @@ public class OrderServiceImpl implements OrderService {
     public Response getAllOrderPage(Pageable pageable) {
         List<Orders> orders = ordersRepository.findAll();
         if (!orders.isEmpty()) {
-            List<OrderCreateDTO> orderList = orders.stream().map(orderMapper::toDto).toList();
+            List<OrderDto> orderList = orders.stream().map(orderMapper::toDto).toList();
             int start = pageable.getPageNumber() * pageable.getPageSize();
             int end = Math.min(start + pageable.getPageSize(), orderList.size());
-            List<OrderCreateDTO> outputOrders = orderList.subList(start, end);
+            List<OrderDto> outputOrders = orderList.subList(start, end);
             log.info("Order list successfully found pageable");
             return Response.builder()
                     .code(HttpStatus.OK.value())

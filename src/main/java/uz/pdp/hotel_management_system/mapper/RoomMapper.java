@@ -3,11 +3,14 @@ package uz.pdp.hotel_management_system.mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import uz.pdp.hotel_management_system.dto.RoomCreateDTO;
+import uz.pdp.hotel_management_system.dto.RoomDto;
 import uz.pdp.hotel_management_system.entity.Hotel;
 import uz.pdp.hotel_management_system.entity.Room;
 import uz.pdp.hotel_management_system.exception.CustomException;
 import uz.pdp.hotel_management_system.repository.HotelRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -15,23 +18,23 @@ public class RoomMapper {
 
     private final HotelRepository hotelRepository;
 
-    public Room toEntity(RoomCreateDTO roomCreateDTO) {
-        Hotel hotel = hotelRepository.findById(roomCreateDTO.getHotelId())
+    public Room toEntity(RoomDto roomDto) {
+        Hotel hotel = hotelRepository.findById(roomDto.getHotelId())
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND,
-                        "Hotel not found from roomMapper: " + roomCreateDTO.getHotelId()));
+                        "Hotel not found from roomMapper: " + roomDto.getHotelId()));
         return Room.builder()
-                .id(roomCreateDTO.getId())
-                .number(roomCreateDTO.getNumber())
-                .numberOfPeople(roomCreateDTO.getNumberOfPeople())
-                .price(roomCreateDTO.getPrice())
+                .id(roomDto.getId())
+                .number(roomDto.getNumber())
+                .numberOfPeople(roomDto.getNumberOfPeople())
+                .price(roomDto.getPrice())
                 .hotel(hotel)
-                .status(roomCreateDTO.getStatus())
-                .state(roomCreateDTO.getState())
+                .status(roomDto.getStatus())
+                .state(roomDto.getState())
                 .build();
     }
 
-    public RoomCreateDTO toDto(Room room) {
-        return RoomCreateDTO.builder()
+    public RoomDto toDto(Room room) {
+        return RoomDto.builder()
                 .id(room.getId())
                 .number(room.getNumber())
                 .numberOfPeople(room.getNumberOfPeople())
@@ -40,5 +43,12 @@ public class RoomMapper {
                 .status(room.getStatus())
                 .state(room.getState())
                 .build();
+    }
+
+    public List<RoomDto> dtoList(List<Room> rooms) {
+        if (rooms != null && !rooms.isEmpty()) {
+            return rooms.stream().map(this::toDto).toList();
+        }
+        return new ArrayList<>();
     }
 }

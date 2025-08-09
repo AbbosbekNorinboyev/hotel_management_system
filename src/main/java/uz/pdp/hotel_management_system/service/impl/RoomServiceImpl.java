@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.pdp.hotel_management_system.dto.RoomCreateDTO;
+import uz.pdp.hotel_management_system.dto.RoomDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Room;
 import uz.pdp.hotel_management_system.exception.CustomException;
@@ -23,8 +23,8 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
 
     @Override
-    public Response createRoom(RoomCreateDTO roomCreateDTO) {
-        Room room = roomMapper.toEntity(roomCreateDTO);
+    public Response createRoom(RoomDto roomDto) {
+        Room room = roomMapper.toEntity(roomDto);
         roomRepository.save(room);
         log.info("Room successfully created");
         return Response.builder()
@@ -57,27 +57,26 @@ public class RoomServiceImpl implements RoomService {
                     .code(HttpStatus.OK.value())
                     .message("Room list successfully found")
                     .success(true)
-                    .data(rooms.stream().map(roomMapper::toDto).toList())
+                    .data(roomMapper.dtoList(rooms))
                     .build();
         }
         log.error("Room list not found");
         return Response.builder()
                 .code(HttpStatus.NOT_FOUND.value())
                 .message("Room list not found")
-                .success(true)
-                .data(rooms.stream().map(roomMapper::toDto).toList())
+                .success(false)
                 .build();
     }
 
     @Override
-    public Response updateRoom(RoomCreateDTO roomCreateDTO, Integer roomId) {
+    public Response updateRoom(RoomDto roomDto, Integer roomId) {
         Room roomFound = roomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + roomId));
-        roomFound.setNumber(roomCreateDTO.getNumber());
-        roomFound.setNumberOfPeople(roomCreateDTO.getNumberOfPeople());
-        roomFound.setPrice(roomCreateDTO.getPrice());
-        roomFound.setStatus(roomCreateDTO.getStatus());
-        roomFound.setState(roomCreateDTO.getState());
+        roomFound.setNumber(roomDto.getNumber());
+        roomFound.setNumberOfPeople(roomDto.getNumberOfPeople());
+        roomFound.setPrice(roomDto.getPrice());
+        roomFound.setStatus(roomDto.getStatus());
+        roomFound.setState(roomDto.getState());
         roomRepository.save(roomFound);
         log.info("Room successfully updated");
         return Response.builder()
@@ -91,10 +90,10 @@ public class RoomServiceImpl implements RoomService {
     public Response getAllRoomPage(Pageable pageable) {
         List<Room> rooms = roomRepository.findAll();
         if (!rooms.isEmpty()) {
-            List<RoomCreateDTO> list = rooms.stream().map(roomMapper::toDto).toList();
+            List<RoomDto> list = rooms.stream().map(roomMapper::toDto).toList();
             int start = pageable.getPageSize() * pageable.getPageNumber();
             int end = Math.min(start + pageable.getPageSize(), list.size());
-            List<RoomCreateDTO> outputRooms = list.subList(start, end);
+            List<RoomDto> outputRooms = list.subList(start, end);
             log.info("Room list successfully found pageable");
             return Response.builder()
                     .code(HttpStatus.OK.value())

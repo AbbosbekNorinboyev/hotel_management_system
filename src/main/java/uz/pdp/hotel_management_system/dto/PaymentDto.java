@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class PaymentCreateDTO {
+public class PaymentDto {
     private Integer id;
     private Double amount;
     private LocalDateTime createdAt;

@@ -4,9 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import uz.pdp.hotel_management_system.dto.PaymentCreateDTO;
+import uz.pdp.hotel_management_system.dto.PaymentDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.service.PaymentService;
 
@@ -17,9 +16,8 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Response createPayment(@Valid @RequestBody PaymentCreateDTO paymentCreateDTO) {
-        return paymentService.createPayment(paymentCreateDTO);
+    public Response createPayment(@Valid @RequestBody PaymentDto paymentDto) {
+        return paymentService.createPayment(paymentDto);
     }
 
     @GetMapping("/{paymentId}")
@@ -33,8 +31,8 @@ public class PaymentController {
     }
 
     @GetMapping("/page")
-    public Response getAllPaymentPage(@RequestParam(defaultValue = "0") Integer page,
-                                      @RequestParam(defaultValue = "10") Integer size) {
+    public Response getAllPaymentPage(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                      @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return paymentService.getAllPaymentPage(pageable);
     }

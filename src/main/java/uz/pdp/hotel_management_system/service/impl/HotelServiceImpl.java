@@ -1,11 +1,12 @@
 package uz.pdp.hotel_management_system.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.pdp.hotel_management_system.dto.HotelCreateDTO;
+import uz.pdp.hotel_management_system.dto.HotelDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Hotel;
 import uz.pdp.hotel_management_system.exception.CustomException;
@@ -20,14 +21,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class HotelServiceImpl implements HotelService {
-
     private final HotelRepository hotelRepository;
     private final HotelMapper hotelMapper;
     private final RoomRepository roomRepository;
 
     @Override
-    public Response createHotel(HotelCreateDTO hotelCreateDTO) {
-        Hotel hotel = hotelMapper.toEntity(hotelCreateDTO);
+    public Response createHotel(HotelDto hotelDto) {
+        Hotel hotel = hotelMapper.toEntity(hotelDto);
         hotelRepository.save(hotel);
         log.info("Hotel successfully created");
         return Response.builder()
@@ -57,26 +57,25 @@ public class HotelServiceImpl implements HotelService {
         if (!hotels.isEmpty()) {
             log.info("Hotel list successfully found");
             return Response.builder()
-                    .code(200)
+                    .code(HttpStatus.OK.value())
                     .message("Hotel list successfully found")
                     .success(true)
-                    .data(hotels.stream().map(hotelMapper::toDto).toList())
+                    .data(hotelMapper.dtoList(hotels))
                     .build();
         }
         log.error("Hotel list not found");
         return Response.builder()
-                .code(HttpStatus.BAD_REQUEST.value())
+                .code(HttpStatus.NOT_FOUND.value())
                 .message("Hotel list not found")
-                .success(true)
-                .data(hotels.stream().map(hotelMapper::toDto).toList())
+                .success(false)
                 .build();
     }
 
     @Override
-    public Response updateHotel(HotelCreateDTO hotelCreateDTO, Integer hotelId) {
+    public Response updateHotel(HotelDto hotelDto, Integer hotelId) {
         Hotel hotelFound = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelId));
-        Hotel hotel = hotelMapper.toEntity(hotelCreateDTO);
+        Hotel hotel = hotelMapper.toEntity(hotelDto);
         hotelFound.setName(hotel.getName());
         hotelFound.setAddress(hotel.getAddress());
         hotelFound.setCity(hotel.getCity());
@@ -90,6 +89,7 @@ public class HotelServiceImpl implements HotelService {
                 .build();
     }
 
+    @Transactional
     @Override
     public Response deleteHotelById(Integer hotelId) {
         Hotel hotel = hotelRepository.findById(hotelId)
@@ -109,10 +109,10 @@ public class HotelServiceImpl implements HotelService {
     public Response getAllHotelPage(Pageable pageable) {
         List<Hotel> hotels = hotelRepository.findAll();
         if (!hotels.isEmpty()) {
-            List<HotelCreateDTO> list = hotels.stream().map(hotelMapper::toDto).toList();
+            List<HotelDto> list = hotels.stream().map(hotelMapper::toDto).toList();
             int start = pageable.getPageNumber() * pageable.getPageSize();
             int end = Math.min(start + pageable.getPageSize(), list.size());
-            List<HotelCreateDTO> outputHotels = list.subList(start, end);
+            List<HotelDto> outputHotels = list.subList(start, end);
             log.info("Hotel list successfully found pageable");
             return Response.builder()
                     .code(HttpStatus.OK.value())

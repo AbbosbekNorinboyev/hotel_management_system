@@ -11,7 +11,7 @@ import uz.pdp.hotel_management_system.enums.RoomState;
 @Getter
 @Setter
 @ToString
-public class RoomCreateDTO {
+public class RoomDto {
     private Integer id;
     private Integer number;
     private Integer numberOfPeople;
