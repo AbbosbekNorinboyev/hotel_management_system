@@ -14,7 +14,7 @@ import java.nio.file.StandardOpenOption;
 public class LogCleanup {
     private static final String LOG_PATH = "C:\\Abbos\\Spring Project\\Test Projects\\HotelManagementSystem\\logs\\HotelManagementSystem.log";
 
-    @Scheduled(cron = "* */10 * * * * ") // har 10 minutda ishlaydi
+    @Scheduled(cron = "* * */10 * * * ") // har 10 minutda ishlaydi
     public void clearLogFile() {
         File file = new File(LOG_PATH);
         if (file.exists()) {
