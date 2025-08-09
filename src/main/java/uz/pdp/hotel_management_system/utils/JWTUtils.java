@@ -1,7 +1,7 @@
 package uz.pdp.hotel_management_system.utils;
 
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class JWTUtils {
     private final CustomUserDetailsService userDetailsService;
     private final String SECRET_KEY = "secretaesrdtfghjkllkjhugyufdrxfgvjgvjbkuhbkjnkngcr";
+
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -61,6 +62,7 @@ public class JWTUtils {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
     private boolean isTokenExpired(String token) {
         return extractAllClaims(token).getExpiration().before(new Date());
     }

@@ -8,12 +8,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import uz.pdp.hotel_management_system.config.CustomUserDetailsService;
 import uz.pdp.hotel_management_system.dto.AuthUserCreateDTO;
 import uz.pdp.hotel_management_system.dto.LoginRequest;
 import uz.pdp.hotel_management_system.entity.AuthUser;
 import uz.pdp.hotel_management_system.enums.Role;
 import uz.pdp.hotel_management_system.repository.AuthUserRepository;
-import uz.pdp.hotel_management_system.config.CustomUserDetailsService;
 import uz.pdp.hotel_management_system.utils.JWTUtils;
 
 import java.util.Optional;
