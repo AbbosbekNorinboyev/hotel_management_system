@@ -67,5 +67,9 @@ public class RoomServiceImplTest {
 
         // Then
         Assertions.assertEquals(roomDto.getNumber(), data.getNumber());
+
+        // Verify
+        Mockito.verify(roomRepository, Mockito.times(1))
+                .findById(2); // faqat bi marta chaqirilishi kerak
     }
 }

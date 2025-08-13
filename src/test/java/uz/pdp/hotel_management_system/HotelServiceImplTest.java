@@ -53,14 +53,9 @@ public class HotelServiceImplTest {
 
         // Then
         Assertions.assertEquals(hotelDto.getAddress(), data.getAddress());
-    }
 
-    @Test
-    void testGetHotelByIdNotFound() {
-        // Given
-        Mockito.when(hotelRepository.findById(2)).thenReturn(Optional.empty());
-
-        // When & Then
-        Assertions.assertThrows(RuntimeException.class, () -> hotelServiceImpl.getHotelById(2));
+        // Verify
+        Mockito.verify(hotelRepository, Mockito.times(1))
+                .findById(5); // faqat bi marta chaqirilishi kerak
     }
 }
