@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import uz.pdp.hotel_management_system.dto.HotelDto;
 import uz.pdp.hotel_management_system.dto.RoomDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Hotel;
@@ -15,6 +16,7 @@ import uz.pdp.hotel_management_system.mapper.RoomMapper;
 import uz.pdp.hotel_management_system.repository.RoomRepository;
 import uz.pdp.hotel_management_system.service.RoomService;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -130,5 +132,35 @@ public class RoomServiceImplTest {
 
         // Verify
         Mockito.verify(roomRepository, Mockito.times(1)).findById(roomId);
+    }
+
+    @Test
+    void testGetAllRoom() {
+        // Given
+        Hotel hotel = Hotel.builder()
+                .id(5)
+                .address("Alisher Navoiy Street")
+                .city("Tashkent")
+                .name("One Star")
+                .phoneNumber("+998711234567")
+                .build();
+        List<Room> rooms = List.of(
+                new Room(2, 2, 2, 200000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE)
+        );
+        List<RoomDto> roomDtoList = List.of(
+                new RoomDto(2, 2, 2, 200000.0, hotel.getId(), RoomState.EMPTY, RoomState.ACTIVE)
+        );
+        Mockito.when(roomRepository.findAll()).thenReturn(rooms);
+        Mockito.when(roomMapper.dtoList(rooms)).thenReturn(roomDtoList);
+
+        // When
+        Response response = roomService.getAllRoom();
+
+        List<RoomDto> data = (List<RoomDto>) response.getData();
+        Assertions.assertEquals(data.size(), 1);
+
+        // Verify that repository method was called once
+        Mockito.verify(roomRepository, Mockito.times(1)).findAll();
+        Mockito.verify(roomMapper, Mockito.times(1)).dtoList(rooms);
     }
 }
