@@ -114,4 +114,21 @@ public class RoomServiceImplTest {
                 .findById(2); // faqat bi marta chaqirilishi kerak
         Mockito.verify(roomMapper, Mockito.times(1)).toDto(room);
     }
+
+    @Test
+    void testGetRoomByIdNotFound() {
+        // Given
+        Integer roomId = 1000; // DB da yo'q
+        Mockito.when(roomRepository.findById(roomId)).thenReturn(Optional.empty());
+
+        // When
+        RuntimeException exception = Assertions.assertThrows(RuntimeException.class,
+                () -> roomService.getRoomById(roomId));
+
+        // Then
+        Assertions.assertEquals("Room not found: " + roomId, exception.getMessage());
+
+        // Verify
+        Mockito.verify(roomRepository, Mockito.times(1)).findById(roomId);
+    }
 }

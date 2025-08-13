@@ -93,4 +93,21 @@ public class HotelServiceImplTest {
                 .findById(5); // faqat bi marta chaqirilishi kerak
         Mockito.verify(hotelMapper, Mockito.times(1)).toDto(hotel);
     }
+
+    @Test
+    void testGetHotelByIdNotFound() {
+        // Given
+        Integer hotelId = 1000;
+        Mockito.when(hotelRepository.findById(hotelId)).thenReturn(Optional.empty());
+
+        // When
+        RuntimeException exception = Assertions.assertThrows(RuntimeException.class,
+                () -> hotelService.getHotelById(hotelId));
+
+        // Then
+        Assertions.assertEquals("Hotel not found: " + hotelId, exception.getMessage());
+
+        // Verify
+        Mockito.verify(hotelRepository, Mockito.times(1)).findById(hotelId);
+    }
 }
