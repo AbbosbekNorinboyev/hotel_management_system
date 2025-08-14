@@ -11,6 +11,7 @@ import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Hotel;
 import uz.pdp.hotel_management_system.mapper.HotelMapper;
 import uz.pdp.hotel_management_system.repository.HotelRepository;
+import uz.pdp.hotel_management_system.repository.RoomRepository;
 import uz.pdp.hotel_management_system.service.HotelService;
 
 import java.util.List;
@@ -22,6 +23,8 @@ import static org.mockito.Mockito.when;
 public class HotelServiceImplTest {
     @MockitoBean
     private HotelRepository hotelRepository; // Mock object
+    @MockitoBean
+    private RoomRepository roomRepository; // Mock object
     @MockitoBean
     private HotelMapper hotelMapper; // Mock object
     @Autowired
@@ -156,5 +159,27 @@ public class HotelServiceImplTest {
         // Verify that repository method was called once
         Mockito.verify(hotelRepository, Mockito.times(1)).findAll();
         Mockito.verify(hotelMapper, Mockito.times(1)).dtoList(hotels);
+    }
+
+    @Test
+    void testDeleteHotel() {
+        // Given
+        Hotel hotel = Hotel.builder()
+                .id(5)
+                .address("Alisher Navoiy Street")
+                .city("Tashkent")
+                .name("One Star")
+                .phoneNumber("+998711234567")
+                .build();
+
+        Mockito.when(hotelRepository.findById(hotel.getId())).thenReturn(Optional.of(hotel));
+
+        Response response = hotelService.deleteHotelById(hotel.getId());
+
+        Assertions.assertEquals("Hotel successfully deleted", response.getMessage());
+
+        Mockito.verify(hotelRepository, Mockito.times(1)).delete(hotel);
+        Mockito.verify(roomRepository, Mockito.times(1)).deleteRoomByHotelId(hotel.getId());
+        Mockito.verify(hotelRepository, Mockito.times(1)).findById(hotel.getId());
     }
 }

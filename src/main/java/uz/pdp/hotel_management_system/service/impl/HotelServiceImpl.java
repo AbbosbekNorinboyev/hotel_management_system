@@ -90,10 +90,9 @@ public class HotelServiceImpl implements HotelService {
     public Response deleteHotelById(Integer hotelId) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelId));
-        System.out.println("hotel = " + hotel);
         roomRepository.deleteRoomByHotelId(hotel.getId());
         hotelRepository.delete(hotel);
-        log.info("Hotel successfully updated");
+        log.info("Hotel successfully deleted");
         return Response.builder()
                 .code(HttpStatus.OK.value())
                 .message("Hotel successfully deleted")

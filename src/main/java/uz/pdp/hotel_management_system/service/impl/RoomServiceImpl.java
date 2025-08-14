@@ -29,7 +29,7 @@ public class RoomServiceImpl implements RoomService {
         log.info("Room successfully created");
         return Response.builder()
                 .code(HttpStatus.OK.value())
-                .message("Room successfully saved")
+                .message("Room successfully created")
                 .success(true)
                 .data(roomMapper.toDto(room))
                 .build();

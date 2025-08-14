@@ -65,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
     public Response getAllOrder() {
         List<Orders> orders = ordersRepository.findAll();
         if (!orders.isEmpty()) {
-            log.info("Order list successfully created");
+            log.info("Order list successfully found");
             return Response.builder()
                     .code(HttpStatus.OK.value())
                     .message("Order list successfully found")
