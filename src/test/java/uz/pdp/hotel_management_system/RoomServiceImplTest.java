@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import uz.pdp.hotel_management_system.dto.HotelDto;
 import uz.pdp.hotel_management_system.dto.RoomDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Hotel;
@@ -161,5 +162,32 @@ public class RoomServiceImplTest {
         // Verify that repository method was called once
         Mockito.verify(roomRepository, Mockito.times(1)).findAll();
         Mockito.verify(roomMapper, Mockito.times(1)).dtoList(rooms);
+    }
+
+    @Test
+    void testUpdateRoom() {
+        // Given (boshlang‘ich qiymatlar)
+        Integer roomId = 1;
+        Hotel hotel = new Hotel(5, "New Hotel", "New Street", "New City", "+998911234567");
+        Room existingRoom = new Room(roomId, 2, 3, 1000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE);
+        RoomDto updatedDto = new RoomDto(roomId, 3, 4, 10000.0, hotel.getId(), RoomState.EMPTY, RoomState.ACTIVE);
+        Room updatedRoom = new Room(roomId, 3, 4, 10000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE);
+
+        // Mock ishlatish
+        Mockito.when(roomRepository.findById(roomId)).thenReturn(Optional.of(existingRoom));
+        Mockito.when(roomRepository.save(existingRoom)).thenReturn(updatedRoom);
+        Mockito.doNothing().when(roomMapper).update(updatedRoom, updatedDto);
+
+        // When (method chaqiriladi)
+        Response result = roomService.updateRoom(updatedDto);
+
+        // Then (tekshiruvlar)
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("Room successfully updated", result.getMessage());
+
+        // Mock verify
+        Mockito.verify(roomRepository).findById(roomId);
+        Mockito.verify(roomMapper).update(existingRoom, updatedDto);
+        Mockito.verify(roomRepository).save(existingRoom);
     }
 }

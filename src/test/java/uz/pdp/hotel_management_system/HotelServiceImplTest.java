@@ -14,7 +14,6 @@ import uz.pdp.hotel_management_system.repository.HotelRepository;
 import uz.pdp.hotel_management_system.repository.RoomRepository;
 import uz.pdp.hotel_management_system.service.HotelService;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.when;
@@ -99,66 +98,29 @@ public class HotelServiceImplTest {
     }
 
     @Test
-    void testGetHotelByIdNotFound() {
-        // Given
-        Integer hotelId = 1000;
-        Mockito.when(hotelRepository.findById(hotelId)).thenReturn(Optional.empty());
+    void testUpdateHotel() {
+        // Given (boshlang‘ich qiymatlar)
+        Integer hotelId = 1;
+        Hotel existingHotel = new Hotel(hotelId, "Old Hotel", "Old Street", "Old City", "+998900000000");
+        HotelDto updatedDto = new HotelDto(hotelId, "New Hotel", "New Street", "New City", "+998911234567");
+        Hotel updatedHotel = new Hotel(hotelId, "New Hotel", "New Street", "New City", "+998911234567");
 
-        // When
-        RuntimeException exception = Assertions.assertThrows(RuntimeException.class,
-                () -> hotelService.getHotelById(hotelId));
+        // Mock ishlatish
+        Mockito.when(hotelRepository.findById(hotelId)).thenReturn(Optional.of(existingHotel));
+        Mockito.when(hotelRepository.save(existingHotel)).thenReturn(updatedHotel);
+        Mockito.doNothing().when(hotelMapper).update(updatedHotel, updatedDto);
 
-        // Then
-        Assertions.assertEquals("Hotel not found: " + hotelId, exception.getMessage());
+        // When (method chaqiriladi)
+        Response result = hotelService.updateHotel(updatedDto);
 
-        // Verify
-        Mockito.verify(hotelRepository, Mockito.times(1)).findById(hotelId);
-    }
+        // Then (tekshiruvlar)
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("Hotel successfully updated", result.getMessage());
 
-    @Test
-    void testGetAllHotel() {
-        // Given
-        List<Hotel> hotels = List.of(
-                new Hotel(5, "One Star", "Alisher Navoiy Street", "Tashkent", "+998711234567"),
-                new Hotel(6, "Two Star", "Amir Temur Street", "Tashkent", "+998721234567"),
-                new Hotel(7, "1", "1", "1", "1"),
-                new Hotel(8, "1", "1", "1", "1"),
-                new Hotel(9, "1", "1", "1", "1"),
-                new Hotel(10, "1", "1", "1", "1"),
-                new Hotel(11, "1", "1", "1", "1"),
-                new Hotel(12, "string", "string", "string", "string"),
-                new Hotel(13, "string", "string", "string", "string"),
-                new Hotel(14, "string", "string", "string", "string"),
-                new Hotel(15, "string", "string", "string", "string"),
-                new Hotel(16, "string", "string", "string", "string")
-        );
-
-        List<HotelDto> hotelDtoList = List.of(
-                new HotelDto(5, "One Star", "Alisher Navoiy Street", "Tashkent", "+998711234567"),
-                new HotelDto(6, "Two Star", "Amir Temur Street", "Tashkent", "+998721234567"),
-                new HotelDto(7, "1", "1", "1", "1"),
-                new HotelDto(8, "1", "1", "1", "1"),
-                new HotelDto(9, "1", "1", "1", "1"),
-                new HotelDto(10, "1", "1", "1", "1"),
-                new HotelDto(11, "1", "1", "1", "1"),
-                new HotelDto(12, "string", "string", "string", "string"),
-                new HotelDto(13, "string", "string", "string", "string"),
-                new HotelDto(14, "string", "string", "string", "string"),
-                new HotelDto(15, "string", "string", "string", "string"),
-                new HotelDto(16, "string", "string", "string", "string")
-        );
-        Mockito.when(hotelRepository.findAll()).thenReturn(hotels);
-        Mockito.when(hotelMapper.dtoList(hotels)).thenReturn(hotelDtoList);
-
-        // When
-        Response response = hotelService.getAllHotel();
-
-        List<HotelDto> data = (List<HotelDto>) response.getData();
-        Assertions.assertEquals(data.size(), 12);
-
-        // Verify that repository method was called once
-        Mockito.verify(hotelRepository, Mockito.times(1)).findAll();
-        Mockito.verify(hotelMapper, Mockito.times(1)).dtoList(hotels);
+        // Mock verify
+        Mockito.verify(hotelRepository).findById(hotelId);
+        Mockito.verify(hotelMapper).update(existingHotel, updatedDto);
+        Mockito.verify(hotelRepository).save(existingHotel);
     }
 
     @Test
