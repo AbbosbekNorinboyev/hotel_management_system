@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.config.CustomUserDetailsService;
-import uz.pdp.hotel_management_system.dto.AuthUserCreateDTO;
+import uz.pdp.hotel_management_system.dto.AuthUserDto;
 import uz.pdp.hotel_management_system.dto.LoginRequest;
 import uz.pdp.hotel_management_system.entity.AuthUser;
 import uz.pdp.hotel_management_system.enums.Role;
@@ -30,14 +30,14 @@ public class AuthUserController {
     private final JWTUtils jwtUtils;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody AuthUserCreateDTO authUserCreateDTO) {
-        Optional<AuthUser> byUsername = authUserRepository.findByUsername(authUserCreateDTO.getUsername());
+    public ResponseEntity<String> register(@RequestBody AuthUserDto authUserDto) {
+        Optional<AuthUser> byUsername = authUserRepository.findByUsername(authUserDto.getUsername());
         if (byUsername.isPresent()) {
             return ResponseEntity.badRequest().body("Username is already exists");
         }
         AuthUser authUser = new AuthUser();
         authUser.setUsername(authUser.getUsername());
-        authUser.setPassword(passwordEncoder.encode(authUserCreateDTO.getPassword()));
+        authUser.setPassword(passwordEncoder.encode(authUserDto.getPassword()));
         authUser.setRole(Role.USER);
         authUserRepository.save(authUser);
         return ResponseEntity.ok("Auth user successfully created");

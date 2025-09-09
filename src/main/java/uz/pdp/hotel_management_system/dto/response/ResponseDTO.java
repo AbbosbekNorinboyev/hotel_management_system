@@ -21,4 +21,5 @@ public class ResponseDTO<T> {
     private T data;
     private List<ErrorResponse> errors;
     private HttpStatus httpStatus;
+    private String timestamp;
 }
