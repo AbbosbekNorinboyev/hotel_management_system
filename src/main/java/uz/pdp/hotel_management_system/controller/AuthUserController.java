@@ -13,10 +13,15 @@ import uz.pdp.hotel_management_system.dto.AuthUserDto;
 import uz.pdp.hotel_management_system.dto.LoginRequest;
 import uz.pdp.hotel_management_system.entity.AuthUser;
 import uz.pdp.hotel_management_system.enums.Role;
+import uz.pdp.hotel_management_system.exception.ResourceNotFoundException;
 import uz.pdp.hotel_management_system.repository.AuthUserRepository;
 import uz.pdp.hotel_management_system.utils.JWTUtils;
 
+import java.lang.module.ResolutionException;
 import java.util.Optional;
+
+import static uz.pdp.hotel_management_system.utils.PasswordHasher.hashPassword;
+import static uz.pdp.hotel_management_system.utils.PasswordValidator.validatePassword;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +42,7 @@ public class AuthUserController {
         }
         AuthUser authUser = new AuthUser();
         authUser.setUsername(authUser.getUsername());
-        authUser.setPassword(passwordEncoder.encode(authUserDto.getPassword()));
+        authUser.setPassword(hashPassword(authUserDto.getPassword()));
         authUser.setRole(Role.USER);
         authUserRepository.save(authUser);
         return ResponseEntity.ok("Auth user successfully created");
@@ -46,9 +51,12 @@ public class AuthUserController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         AuthUser authUser = authUserRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + loginRequest.getUsername()));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found: " + loginRequest.getUsername()));
         if (authUser.getUsername() == null) {
-            return ResponseEntity.ok().body("Username not found");
+            return ResponseEntity.badRequest().body("Username not found");
+        }
+        if (!validatePassword(loginRequest.getPassword(), authUser.getPassword())) {
+            return ResponseEntity.badRequest().body("Invalid password");
         }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())

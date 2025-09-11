@@ -11,7 +11,10 @@ import uz.pdp.hotel_management_system.dto.response.ErrorResponse;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static uz.pdp.hotel_management_system.utils.Util.localDateTimeFormatter;
 
 @Slf4j
 @RestControllerAdvice
@@ -41,8 +44,10 @@ public class GlobalExceptionHandle {
     public ResponseDTO<Void> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
         return ResponseDTO.<Void>builder()
                 .code(HttpStatus.NOT_FOUND.value())
+                .httpStatus(HttpStatus.NOT_FOUND)
                 .message(resourceNotFoundException.getMessage())
                 .success(false)
+                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
                 .build();
     }
 
@@ -66,8 +71,10 @@ public class GlobalExceptionHandle {
     public ResponseEntity<ResponseDTO<Void>> handleException(Exception exception) {
         ResponseDTO<Void> responseDTO = ResponseDTO.<Void>builder()
                 .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
                 .message("Something wrong -> " + exception.getMessage())
                 .success(false)
+                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
                 .build();
         return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -76,9 +83,11 @@ public class GlobalExceptionHandle {
     public ResponseDTO<Void> handleForbidden(CustomForbiddenException customForbiddenException) {
         return ResponseDTO.<Void>builder()
                 .code(HttpStatus.FORBIDDEN.value())
+                .httpStatus(HttpStatus.FORBIDDEN)
                 .message("Access denied -> " + customForbiddenException.getMessage())
                 .httpStatus(HttpStatus.FORBIDDEN)
                 .success(false)
+                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
                 .build();
     }
 }
