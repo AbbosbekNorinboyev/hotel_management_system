@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.config.CustomUserDetailsService;
@@ -17,7 +16,6 @@ import uz.pdp.hotel_management_system.exception.ResourceNotFoundException;
 import uz.pdp.hotel_management_system.repository.AuthUserRepository;
 import uz.pdp.hotel_management_system.utils.JWTUtils;
 
-import java.lang.module.ResolutionException;
 import java.util.Optional;
 
 import static uz.pdp.hotel_management_system.utils.PasswordHasher.hashPassword;
