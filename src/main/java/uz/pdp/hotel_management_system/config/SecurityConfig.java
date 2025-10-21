@@ -46,7 +46,8 @@ public class SecurityConfig {
                                     "/swagger-ui.html",
                                     "/v3/api-docs/**",
                                     "/api/auth/**",
-                                    "/webjars/**").permitAll()
+                                    "/webjars/**",
+                                    "/actuator/**").permitAll()
                             .requestMatchers(
                                     "/api/users/me",
                                     "/api/hotels/create",
