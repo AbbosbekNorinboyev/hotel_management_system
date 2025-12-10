@@ -15,7 +15,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class PaymentMapper {
-
     private final RoomRepository roomRepository;
 
     public Payment toEntity(PaymentDto paymentDto) {

@@ -4,7 +4,6 @@ import org.springframework.data.domain.Pageable;
 import uz.pdp.hotel_management_system.dto.RoomDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 
-
 public interface RoomService {
     Response createRoom(RoomDto roomDto);
 

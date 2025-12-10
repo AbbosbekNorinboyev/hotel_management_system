@@ -7,7 +7,6 @@ import uz.pdp.hotel_management_system.enums.PaymentType;
 
 import java.time.LocalDateTime;
 
-
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor

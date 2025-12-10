@@ -27,7 +27,6 @@ import static uz.pdp.hotel_management_system.utils.PasswordValidator.validatePas
 @CrossOrigin("http://localhost:1173")
 public class AuthUserController {
     private final AuthUserRepository authUserRepository;
-    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService customUserDetailsService;
     private final JWTUtils jwtUtils;

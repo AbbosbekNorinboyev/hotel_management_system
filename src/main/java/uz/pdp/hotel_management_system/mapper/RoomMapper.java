@@ -15,7 +15,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class RoomMapper {
-
     private final HotelRepository hotelRepository;
 
     public Room toEntity(RoomDto roomDto) {
