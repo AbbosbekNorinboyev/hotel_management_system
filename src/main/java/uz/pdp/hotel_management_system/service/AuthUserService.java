@@ -8,7 +8,6 @@ import uz.pdp.hotel_management_system.repository.AuthUserRepository;
 @Service
 @RequiredArgsConstructor
 public class AuthUserService {
-
     private final AuthUserRepository authUserRepository;
 
     public String getUserNameById(Integer id) {

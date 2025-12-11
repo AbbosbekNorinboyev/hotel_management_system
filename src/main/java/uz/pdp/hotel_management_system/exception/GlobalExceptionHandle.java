@@ -9,12 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import uz.pdp.hotel_management_system.dto.response.Empty;
 import uz.pdp.hotel_management_system.dto.response.ErrorResponse;
 import uz.pdp.hotel_management_system.dto.response.Response;
-import uz.pdp.hotel_management_system.dto.response.ResponseDTO;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
-import static uz.pdp.hotel_management_system.utils.Util.localDateTimeFormatter;
 
 @Slf4j
 @RestControllerAdvice
@@ -32,7 +28,7 @@ public class GlobalExceptionHandle {
                 .message(errorMessage)
                 .build();
 
-        Response responseData = Response.builder()
+        var responseData = Response.builder()
                 .success(false)
                 .error(errorResponse)
                 .data(Empty.builder().build())
@@ -41,14 +37,19 @@ public class GlobalExceptionHandle {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseDTO<Void> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
-        return ResponseDTO.<Void>builder()
+    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException resourceNotFoundException) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(HttpStatus.NOT_FOUND.value())
-                .httpStatus(HttpStatus.NOT_FOUND)
                 .message(resourceNotFoundException.getMessage())
-                .success(false)
-                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
                 .build();
+
+        Response<Object, Object> response = Response.builder()
+                .success(false)
+                .error(errorResponse)
+                .data(Empty.builder().build())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(CustomException.class)
@@ -68,26 +69,33 @@ public class GlobalExceptionHandle {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResponseDTO<Void>> handleException(Exception exception) {
-        ResponseDTO<Void> responseDTO = ResponseDTO.<Void>builder()
+    public ResponseEntity<?> handleException(Exception exception) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .httpStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-                .message("Something wrong -> " + exception.getMessage())
-                .success(false)
-                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
+                .message(exception.getMessage())
                 .build();
-        return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        Response<Object, Object> response = Response.builder()
+                .success(false)
+                .error(errorResponse)
+                .data(Empty.builder().build())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(CustomForbiddenException.class)
-    public ResponseDTO<Void> handleForbidden(CustomForbiddenException customForbiddenException) {
-        return ResponseDTO.<Void>builder()
+    public ResponseEntity<?> handleForbidden(CustomForbiddenException customForbiddenException) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(HttpStatus.FORBIDDEN.value())
-                .httpStatus(HttpStatus.FORBIDDEN)
-                .message("Access denied -> " + customForbiddenException.getMessage())
-                .httpStatus(HttpStatus.FORBIDDEN)
-                .success(false)
-                .timestamp(localDateTimeFormatter(LocalDateTime.now()))
+                .message(customForbiddenException.getMessage())
                 .build();
+
+        Response<Object, Object> response = Response.builder()
+                .success(false)
+                .error(errorResponse)
+                .data(Empty.builder().build())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 }

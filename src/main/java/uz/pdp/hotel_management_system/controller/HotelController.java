@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.dto.HotelDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
@@ -26,7 +27,7 @@ public class HotelController {
     }
 
     @GetMapping("/getAll")
-    public Response getAllHotel() {
+    public ResponseEntity<?> getAllHotel() {
         return hotelService.getAllHotel();
     }
 

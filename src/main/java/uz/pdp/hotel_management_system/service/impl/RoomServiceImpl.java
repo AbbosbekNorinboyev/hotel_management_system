@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.RoomDto;
+import uz.pdp.hotel_management_system.dto.response.Empty;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Room;
 import uz.pdp.hotel_management_system.exception.CustomException;
@@ -28,10 +29,9 @@ public class RoomServiceImpl implements RoomService {
         roomRepository.save(room);
         log.info("Room successfully created");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Room successfully created")
                 .success(true)
                 .data(roomMapper.toDto(room))
+                .error(Empty.builder().build())
                 .build();
     }
 
@@ -41,10 +41,9 @@ public class RoomServiceImpl implements RoomService {
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + roomId));
         log.info("Room successfully found");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Room successfully found")
                 .success(true)
                 .data(roomMapper.toDto(room))
+                .error(Empty.builder().build())
                 .build();
     }
 
@@ -54,16 +53,13 @@ public class RoomServiceImpl implements RoomService {
         if (!rooms.isEmpty()) {
             log.info("Room list successfully found");
             return Response.builder()
-                    .code(HttpStatus.OK.value())
-                    .message("Room list successfully found")
                     .success(true)
                     .data(roomMapper.dtoList(rooms))
+                    .error(Empty.builder().build())
                     .build();
         }
         log.error("Room list not found");
         return Response.builder()
-                .code(HttpStatus.NOT_FOUND.value())
-                .message("Room list not found")
                 .success(false)
                 .build();
     }
@@ -76,9 +72,8 @@ public class RoomServiceImpl implements RoomService {
         roomRepository.save(roomFound);
         log.info("Room successfully updated");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Room successfully updated")
                 .success(true)
+                .error(Empty.builder().build())
                 .build();
     }
 
@@ -92,15 +87,12 @@ public class RoomServiceImpl implements RoomService {
             List<RoomDto> outputRooms = list.subList(start, end);
             log.info("Room list successfully found pageable");
             return Response.builder()
-                    .code(HttpStatus.OK.value())
-                    .message("Room list successfully found pageable")
                     .success(true)
                     .data(outputRooms)
+                    .error(Empty.builder().build())
                     .build();
         }
         return Response.builder()
-                .code(HttpStatus.NOT_FOUND.value())
-                .message("Room list not found pageable")
                 .success(false)
                 .build();
     }

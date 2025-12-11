@@ -1,6 +1,7 @@
 package uz.pdp.hotel_management_system.service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import uz.pdp.hotel_management_system.dto.PaymentDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 
@@ -10,9 +11,9 @@ import uz.pdp.hotel_management_system.dto.response.Response;
 public interface PaymentService {
     Response createPayment(PaymentDto paymentDto);
 
-    Response getPayment(Integer paymentId);
+    ResponseEntity<?> getPayment(Integer paymentId);
 
-    Response getAllPayment();
+    ResponseEntity<?> getAllPayment();
 
     Response getAllPaymentPage(Pageable pageable);
 }

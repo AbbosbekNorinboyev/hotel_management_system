@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.PaymentDto;
+import uz.pdp.hotel_management_system.dto.response.Empty;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Payment;
 import uz.pdp.hotel_management_system.exception.CustomException;
@@ -28,44 +30,35 @@ public class PaymentServiceImpl implements PaymentService {
         paymentRepository.save(payment);
         log.info("Payment successfully created");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Payment successfully created")
                 .success(true)
                 .data(paymentMapper.toDto(payment))
+                .error(Empty.builder().build())
                 .build();
     }
 
     @Override
-    public Response getPayment(Integer paymentId) {
+    public ResponseEntity<?> getPayment(Integer paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Payment not found: " + paymentId));
         log.info("Payment successfully found");
-        return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Payment successfully found")
+        Response<Object, Object> response = Response.builder()
                 .success(true)
                 .data(paymentMapper.toDto(payment))
+                .error(Empty.builder().build())
                 .build();
+        return ResponseEntity.ok(response);
     }
 
     @Override
-    public Response getAllPayment() {
+    public ResponseEntity<?> getAllPayment() {
         List<Payment> payments = paymentRepository.findAll();
-        if (!payments.isEmpty()) {
-            log.info("Payment list successfully found");
-            return Response.builder()
-                    .code(HttpStatus.OK.value())
-                    .message("Payment list successfully found")
-                    .success(true)
-                    .data(paymentMapper.dtoList(payments))
-                    .build();
-        }
-        log.error("Payment list not found");
-        return Response.builder()
-                .code(HttpStatus.BAD_REQUEST.value())
-                .message("Payment list not found")
-                .success(false)
+        log.info("Payment list successfully found");
+        Response<Object, Object> response = Response.builder()
+                .success(true)
+                .data(paymentMapper.dtoList(payments))
+                .error(Empty.builder().build())
                 .build();
+        return ResponseEntity.ok(response);
     }
 
     @Override
@@ -78,15 +71,12 @@ public class PaymentServiceImpl implements PaymentService {
             List<PaymentDto> outputPayments = paymentList.subList(start, end);
             log.info("Payment list successfully found pageable");
             return Response.builder()
-                    .code(HttpStatus.OK.value())
-                    .message("Payment list successfully found pageable")
                     .success(true)
                     .data(outputPayments)
+                    .error(Empty.builder().build())
                     .build();
         }
         return Response.builder()
-                .code(HttpStatus.NOT_FOUND.value())
-                .message("Payment list not found pageable")
                 .success(false)
                 .build();
     }

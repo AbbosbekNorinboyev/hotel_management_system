@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.HotelDto;
+import uz.pdp.hotel_management_system.dto.response.Empty;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Hotel;
 import uz.pdp.hotel_management_system.exception.CustomException;
@@ -31,10 +33,9 @@ public class HotelServiceImpl implements HotelService {
         hotelRepository.save(hotel);
         log.info("Hotel successfully created");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Hotel successfully created")
                 .success(true)
                 .data(hotelMapper.toDto(hotel))
+                .error(Empty.builder().build())
                 .build();
     }
 
@@ -44,31 +45,22 @@ public class HotelServiceImpl implements HotelService {
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelId));
         log.info("Hotel successfully found");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Hotel successfully found")
                 .success(true)
                 .data(hotelMapper.toDto(hotel))
+                .error(Empty.builder().build())
                 .build();
     }
 
     @Override
-    public Response getAllHotel() {
+    public ResponseEntity<?> getAllHotel() {
         List<Hotel> hotels = hotelRepository.findAll();
-        if (!hotels.isEmpty()) {
-            log.info("Hotel list successfully found");
-            return Response.builder()
-                    .code(HttpStatus.OK.value())
-                    .message("Hotel list successfully found")
-                    .success(true)
-                    .data(hotelMapper.dtoList(hotels))
-                    .build();
-        }
-        log.error("Hotel list not found");
-        return Response.builder()
-                .code(HttpStatus.NOT_FOUND.value())
-                .message("Hotel list not found")
-                .success(false)
+        log.info("Hotel list successfully found");
+        Response<Object, Object> response = Response.builder()
+                .success(true)
+                .data(hotelMapper.dtoList(hotels))
+                .error(Empty.builder().build())
                 .build();
+        return ResponseEntity.ok(response);
     }
 
     @Override
@@ -79,9 +71,9 @@ public class HotelServiceImpl implements HotelService {
         hotelRepository.save(hotelFound);
         log.info("Hotel successfully updated");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Hotel successfully updated")
                 .success(true)
+                .data(Empty.builder().build())
+                .error(Empty.builder().build())
                 .build();
     }
 
@@ -94,9 +86,9 @@ public class HotelServiceImpl implements HotelService {
         hotelRepository.delete(hotel);
         log.info("Hotel successfully deleted");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Hotel successfully deleted")
                 .success(true)
+                .data(Empty.builder().build())
+                .error(Empty.builder().build())
                 .build();
     }
 
@@ -110,15 +102,12 @@ public class HotelServiceImpl implements HotelService {
             List<HotelDto> outputHotels = list.subList(start, end);
             log.info("Hotel list successfully found pageable");
             return Response.builder()
-                    .code(HttpStatus.OK.value())
-                    .message("Hotel list successfully found pageable")
                     .success(true)
                     .data(outputHotels)
+                    .error(Empty.builder().build())
                     .build();
         }
         return Response.builder()
-                .code(HttpStatus.NOT_FOUND.value())
-                .message("Hotel list not found pageable")
                 .success(false)
                 .build();
     }

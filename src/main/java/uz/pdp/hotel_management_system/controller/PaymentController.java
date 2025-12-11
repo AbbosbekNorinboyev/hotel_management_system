@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.dto.PaymentDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
@@ -21,12 +22,12 @@ public class PaymentController {
     }
 
     @GetMapping("/get")
-    public Response getPayment(@RequestParam("paymentId") Integer paymentId) {
+    public ResponseEntity<?> getPayment(@RequestParam("paymentId") Integer paymentId) {
         return paymentService.getPayment(paymentId);
     }
 
     @GetMapping("/getAll")
-    public Response getAllPayment() {
+    public ResponseEntity<?> getAllPayment() {
         return paymentService.getAllPayment();
     }
 

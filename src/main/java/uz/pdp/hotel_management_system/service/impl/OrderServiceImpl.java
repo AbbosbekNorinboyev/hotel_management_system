@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.pdp.hotel_management_system.dto.OrderDto;
+import uz.pdp.hotel_management_system.dto.response.Empty;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.AuthUser;
 import uz.pdp.hotel_management_system.entity.Orders;
@@ -41,10 +43,9 @@ public class OrderServiceImpl implements OrderService {
         ordersRepository.save(order);
         log.info("Order successfully created");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Order successfully created")
                 .success(true)
                 .data(orderMapper.toDto(order))
+                .error(Empty.builder().build())
                 .build();
     }
 
@@ -54,30 +55,22 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Order not found: " + orderId));
         log.info("Order successfully found");
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Order successfully found")
                 .success(true)
                 .data(orderMapper.toDto(order))
+                .error(Empty.builder().build())
                 .build();
     }
 
     @Override
-    public Response getAllOrder() {
+    public ResponseEntity<?> getAllOrder() {
         List<Orders> orders = ordersRepository.findAll();
-        if (!orders.isEmpty()) {
-            log.info("Order list successfully found");
-            return Response.builder()
-                    .code(HttpStatus.OK.value())
-                    .message("Order list successfully found")
-                    .success(true)
-                    .data(orderMapper.dtoList(orders))
-                    .build();
-        }
-        return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Order list not found")
-                .success(false)
+        log.info("Order list successfully found");
+        Response<Object, Object> response = Response.builder()
+                .success(true)
+                .data(orderMapper.dtoList(orders))
+                .error(Empty.builder().build())
                 .build();
+        return ResponseEntity.ok(response);
     }
 
     @Transactional
@@ -88,9 +81,8 @@ public class OrderServiceImpl implements OrderService {
         log.info("Order successfully deleted");
         ordersRepository.delete(order);
         return Response.builder()
-                .code(HttpStatus.OK.value())
-                .message("Oder successfully deleted")
                 .success(true)
+                .error(Empty.builder().build())
                 .build();
     }
 
@@ -104,16 +96,14 @@ public class OrderServiceImpl implements OrderService {
             List<OrderDto> outputOrders = orderList.subList(start, end);
             log.info("Order list successfully found pageable");
             return Response.builder()
-                    .code(HttpStatus.OK.value())
-                    .message("Oder list successfully found pageable")
                     .success(true)
                     .data(outputOrders)
+                    .error(Empty.builder().build())
                     .build();
         }
         return Response.builder()
-                .code(HttpStatus.NOT_FOUND.value())
-                .message("Oder list not found pageable")
                 .success(false)
+                .data(Empty.builder().build())
                 .build();
     }
 }
