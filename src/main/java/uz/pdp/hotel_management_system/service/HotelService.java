@@ -18,5 +18,4 @@ public interface HotelService {
     Response deleteHotelById(Integer hotelId);
 
     Response getAllHotelPage(Pageable pageable);
-
 }
