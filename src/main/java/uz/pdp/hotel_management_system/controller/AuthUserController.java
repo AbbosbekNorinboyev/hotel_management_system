@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.config.CustomUserDetailsService;
 import uz.pdp.hotel_management_system.dto.AuthUserDto;
@@ -61,11 +60,5 @@ public class AuthUserController {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginRequest.getUsername());
         String jwtToken = jwtUtils.generateToken(userDetails.getUsername());
         return ResponseEntity.ok(jwtToken);
-    }
-
-    @GetMapping("/getUsername")
-    public ResponseEntity<String> getUsername(@RequestParam String token) {
-        String username = jwtUtils.generateToken(token);
-        return ResponseEntity.ok(username);
     }
 }
