@@ -69,16 +69,20 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public ResponseEntity<?> getAllBooking() {
+    public ResponseEntity<?> getAllBooking(Pageable pageable) {
         List<Booking> bookings = bookingRepository.findAll();
-        log.info("Bookings list successfully found");
+        List<BookingDto> bookingList = bookings.stream().map(bookingMapper::toDto).toList();
+        int start = pageable.getPageNumber() * pageable.getPageSize();
+        int end = Math.min(start + pageable.getPageSize(), bookingList.size());
+        List<BookingDto> outputBookings = bookingList.subList(start, end);
+        log.info("Bookings list successfully found pageable");
 
         var response = Response.builder()
                 .success(true)
-                .data(bookingMapper.dtoList(bookings))
+                .data(outputBookings)
                 .error(Empty.builder().build())
                 .build();
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Transactional
@@ -91,23 +95,6 @@ public class BookingServiceImpl implements BookingService {
 
         var response = Response.builder()
                 .success(true)
-                .error(Empty.builder().build())
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @Override
-    public ResponseEntity<?> getAllBookingPage(Pageable pageable) {
-        List<Booking> bookings = bookingRepository.findAll();
-        List<BookingDto> bookingList = bookings.stream().map(bookingMapper::toDto).toList();
-        int start = pageable.getPageNumber() * pageable.getPageSize();
-        int end = Math.min(start + pageable.getPageSize(), bookingList.size());
-        List<BookingDto> outputBookings = bookingList.subList(start, end);
-        log.info("Bookings list successfully found pageable");
-
-        var response = Response.builder()
-                .success(true)
-                .data(outputBookings)
                 .error(Empty.builder().build())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);

@@ -10,10 +10,8 @@ public interface BookingService {
 
     ResponseEntity<?> getBookingById(Long bookingId);
 
-    ResponseEntity<?> getAllBooking();
+    ResponseEntity<?> getAllBooking(Pageable pageable);
 
     @Transactional
     ResponseEntity<?> deleteBookingById(Long bookingId);
-
-    ResponseEntity<?> getAllBookingPage(Pageable pageable);
 }

@@ -26,19 +26,14 @@ public class BookingController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<?> getAllBooking() {
-        return bookingService.getAllBooking();
+    public ResponseEntity<?> getAllBooking(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                           @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return bookingService.getAllBooking(pageable);
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteBooking(@RequestParam("bookingId") Long bookingId) {
         return bookingService.deleteBookingById(bookingId);
-    }
-
-    @GetMapping("/getAll/page")
-    public ResponseEntity<?> getAllBookingPage(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                               @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return bookingService.getAllBookingPage(pageable);
     }
 }

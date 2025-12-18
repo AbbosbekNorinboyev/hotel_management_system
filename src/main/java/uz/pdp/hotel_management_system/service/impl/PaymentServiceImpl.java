@@ -25,15 +25,17 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    public Response createPayment(PaymentDto paymentDto) {
+    public ResponseEntity<?> createPayment(PaymentDto paymentDto) {
         Payment payment = paymentMapper.toEntity(paymentDto);
         paymentRepository.save(payment);
         log.info("Payment successfully created");
-        return Response.builder()
+
+        var response = Response.builder()
                 .success(true)
                 .data(paymentMapper.toDto(payment))
                 .error(Empty.builder().build())
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
@@ -41,43 +43,29 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Payment not found: " + paymentId));
         log.info("Payment successfully found");
-        Response<Object, Object> response = Response.builder()
+
+        var response = Response.builder()
                 .success(true)
                 .data(paymentMapper.toDto(payment))
                 .error(Empty.builder().build())
                 .build();
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<?> getAllPayment() {
+    public ResponseEntity<?> getAllPayment(Pageable pageable) {
         List<Payment> payments = paymentRepository.findAll();
-        log.info("Payment list successfully found");
-        Response<Object, Object> response = Response.builder()
+        List<PaymentDto> paymentList = payments.stream().map(paymentMapper::toDto).toList();
+        int start = pageable.getPageSize() * pageable.getPageNumber();
+        int end = Math.min(start + pageable.getPageSize(), paymentList.size());
+        List<PaymentDto> outputPayments = paymentList.subList(start, end);
+        log.info("Payment list successfully found pageable");
+
+        var response = Response.builder()
                 .success(true)
-                .data(paymentMapper.dtoList(payments))
+                .data(outputPayments)
                 .error(Empty.builder().build())
                 .build();
-        return ResponseEntity.ok(response);
-    }
-
-    @Override
-    public Response getAllPaymentPage(Pageable pageable) {
-        List<Payment> payments = paymentRepository.findAll();
-        if (!payments.isEmpty()) {
-            List<PaymentDto> paymentList = payments.stream().map(paymentMapper::toDto).toList();
-            int start = pageable.getPageSize() * pageable.getPageNumber();
-            int end = Math.min(start + pageable.getPageSize(), paymentList.size());
-            List<PaymentDto> outputPayments = paymentList.subList(start, end);
-            log.info("Payment list successfully found pageable");
-            return Response.builder()
-                    .success(true)
-                    .data(outputPayments)
-                    .error(Empty.builder().build())
-                    .build();
-        }
-        return Response.builder()
-                .success(false)
-                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.dto.PaymentDto;
-import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.service.PaymentService;
 
 @RestController
@@ -17,7 +16,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/create")
-    public Response createPayment(@Valid @RequestBody PaymentDto paymentDto) {
+    public ResponseEntity<?> createPayment(@Valid @RequestBody PaymentDto paymentDto) {
         return paymentService.createPayment(paymentDto);
     }
 
@@ -27,14 +26,9 @@ public class PaymentController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<?> getAllPayment() {
-        return paymentService.getAllPayment();
-    }
-
-    @GetMapping("/getAll/page")
-    public Response getAllPaymentPage(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                      @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+    public ResponseEntity<?> getAllPaymentPage(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                               @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        return paymentService.getAllPaymentPage(pageable);
+        return paymentService.getAllPayment(pageable);
     }
 }
