@@ -2,8 +2,8 @@ package uz.pdp.hotel_management_system.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import uz.pdp.hotel_management_system.entity.Orders;
+import uz.pdp.hotel_management_system.entity.Booking;
 
 @Repository
-public interface OrdersRepository extends JpaRepository<Orders, Long> {
+public interface BookingRepository extends JpaRepository<Booking, Long> {
 }

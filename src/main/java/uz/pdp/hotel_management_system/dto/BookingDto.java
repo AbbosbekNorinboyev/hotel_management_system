@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-public class OrderDto {
+public class BookingDto {
     private Long id;
     private Long authUserId;
     private Long roomId;

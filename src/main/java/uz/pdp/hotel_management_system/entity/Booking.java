@@ -12,10 +12,11 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-public class Orders {
+public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "auth_user_id")
     private AuthUser authUser;
@@ -24,7 +25,7 @@ public class Orders {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    private int numberOfPeople;
+    private Integer numberOfPeople;
     private LocalDate beginDate;
     private LocalDate endDate;
 }

@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(
         info = @Info(
                 version = "2.6.0",
-                description = "API Documentation"
+                title = "HOTEL MANAGEMENT SYSTEM",
+                description = "HOTEL MANAGEMENT SYSTEM API Documentation"
         ),
         servers = {
                 @Server(url = "http://localhost:1173", description = "Local Server"),
