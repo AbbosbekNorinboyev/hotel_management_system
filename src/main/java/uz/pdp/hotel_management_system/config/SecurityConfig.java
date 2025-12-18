@@ -57,7 +57,8 @@ public class SecurityConfig {
                                     "/api/rooms/update",
                                     "/api/payments/create",
                                     "/api/orders/create",
-                                    "/api/orders/delete/").hasRole("ADMIN")
+                                    "/api/orders/delete/"
+                            ).hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })
                 // Exception handling for Access Denied

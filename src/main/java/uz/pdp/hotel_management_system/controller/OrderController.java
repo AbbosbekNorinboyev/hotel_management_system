@@ -22,7 +22,7 @@ public class OrderController {
     }
 
     @GetMapping("/get")
-    public Response getOrder(@RequestParam("orderId") Integer orderId) {
+    public Response getOrder(@RequestParam("orderId") Long orderId) {
         return orderService.getOrderById(orderId);
     }
 
@@ -32,7 +32,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/delete")
-    public Response deleteOrder(@RequestParam("orderId") Integer orderId) {
+    public Response deleteOrder(@RequestParam("orderId") Long orderId) {
         return orderService.deleteOrderById(orderId);
     }
 

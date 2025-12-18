@@ -14,7 +14,7 @@ import uz.pdp.hotel_management_system.enums.RoomState;
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private Integer number;
     private Integer numberOfPeople;
     private Double price;

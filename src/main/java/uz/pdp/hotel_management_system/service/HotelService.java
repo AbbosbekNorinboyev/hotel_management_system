@@ -9,14 +9,14 @@ import uz.pdp.hotel_management_system.dto.response.Response;
 public interface HotelService {
     Response createHotel(HotelDto hotelDto);
 
-    Response getHotelById(Integer hotelId);
+    Response getHotelById(Long hotelId);
 
     ResponseEntity<?> getAllHotel();
 
     Response updateHotel(HotelDto hotelDto);
 
     @Transactional
-    Response deleteHotelById(Integer hotelId);
+    Response deleteHotelById(Long hotelId);
 
     Response getAllHotelPage(Pageable pageable);
 }

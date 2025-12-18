@@ -38,7 +38,7 @@ public class RoomMapper {
                 .number(room.getNumber())
                 .numberOfPeople(room.getNumberOfPeople())
                 .price(room.getPrice())
-                .hotelId(room.getHotel().getId())
+                .hotelId(room.getHotel() != null ? room.getHotel().getId() : null)
                 .status(room.getStatus())
                 .state(room.getState())
                 .build();

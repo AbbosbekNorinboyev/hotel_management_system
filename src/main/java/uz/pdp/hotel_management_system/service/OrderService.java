@@ -9,12 +9,12 @@ import uz.pdp.hotel_management_system.dto.response.Response;
 public interface OrderService {
     Response createOrder(OrderDto orderDto);
 
-    Response getOrderById(Integer orderId);
+    Response getOrderById(Long orderId);
 
     ResponseEntity<?> getAllOrder();
 
     @Transactional
-    Response deleteOrderById(Integer orderId);
+    Response deleteOrderById(Long orderId);
 
     Response getAllOrderPage(Pageable pageable);
 }

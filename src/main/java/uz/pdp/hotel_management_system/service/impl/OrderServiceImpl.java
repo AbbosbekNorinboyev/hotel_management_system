@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Response getOrderById(Integer orderId) {
+    public Response getOrderById(Long orderId) {
         Orders order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Order not found: " + orderId));
         log.info("Order successfully found");
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Response deleteOrderById(Integer orderId) {
+    public Response deleteOrderById(Long orderId) {
         Orders order = ordersRepository.findById(orderId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Order npt found: " + orderId));
         log.info("Order successfully deleted");

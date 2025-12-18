@@ -20,7 +20,7 @@ import java.util.List;
 public class AuthUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String username;
     private String password;
     @Enumerated(EnumType.STRING)

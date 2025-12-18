@@ -37,7 +37,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public ResponseEntity<?> getPayment(Integer paymentId) {
+    public ResponseEntity<?> getPayment(Long paymentId) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Payment not found: " + paymentId));
         log.info("Payment successfully found");

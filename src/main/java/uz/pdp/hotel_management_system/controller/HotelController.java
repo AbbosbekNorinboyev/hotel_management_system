@@ -22,7 +22,7 @@ public class HotelController {
     }
 
     @GetMapping("/get")
-    public Response getHotel(@RequestParam("hotelId") Integer hotelId) {
+    public Response getHotel(@RequestParam("hotelId") Long hotelId) {
         return hotelService.getHotelById(hotelId);
     }
 
@@ -37,7 +37,7 @@ public class HotelController {
     }
 
     @DeleteMapping("/delete")
-    public Response deleteHotel(@RequestParam("hotelId") Integer hotelId) {
+    public Response deleteHotel(@RequestParam("hotelId") Long hotelId) {
         return hotelService.deleteHotelById(hotelId);
     }
 

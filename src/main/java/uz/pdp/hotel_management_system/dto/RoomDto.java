@@ -12,11 +12,11 @@ import uz.pdp.hotel_management_system.enums.RoomState;
 @Setter
 @ToString
 public class RoomDto {
-    private Integer id;
+    private Long id;
     private Integer number;
     private Integer numberOfPeople;
     private Double price;
-    private Integer hotelId;
+    private Long hotelId;
     @Enumerated(EnumType.STRING)
     private RoomState status = RoomState.ACTIVE;
     @Enumerated(EnumType.STRING)

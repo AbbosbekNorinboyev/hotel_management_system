@@ -16,7 +16,7 @@ import lombok.*;
 public class Hotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String name;
     private String address;
     private String city;

@@ -36,7 +36,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public Response getRoomById(Integer roomId) {
+    public Response getRoomById(Long roomId) {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + roomId));
         log.info("Room successfully found");

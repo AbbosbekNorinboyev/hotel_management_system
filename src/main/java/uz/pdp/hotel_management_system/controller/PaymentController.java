@@ -22,7 +22,7 @@ public class PaymentController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<?> getPayment(@RequestParam("paymentId") Integer paymentId) {
+    public ResponseEntity<?> getPayment(@RequestParam("paymentId") Long paymentId) {
         return paymentService.getPayment(paymentId);
     }
 

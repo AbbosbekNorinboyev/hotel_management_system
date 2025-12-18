@@ -16,11 +16,12 @@ import java.time.LocalDateTime;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private Double amount;
     private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id")
     private Room room;

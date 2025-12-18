@@ -10,7 +10,7 @@ import uz.pdp.hotel_management_system.repository.AuthUserRepository;
 public class AuthUserService {
     private final AuthUserRepository authUserRepository;
 
-    public String getUserNameById(Integer id) {
+    public String getUserNameById(Long id) {
         return authUserRepository.findById(id)
                 .map(AuthUser::getUsername)
                 .orElseThrow(() -> new RuntimeException("User not found"));

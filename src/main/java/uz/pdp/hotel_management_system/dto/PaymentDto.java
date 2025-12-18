@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class PaymentDto {
-    private Integer id;
+    private Long id;
     private Double amount;
     private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
-    private Integer roomId;
+    private Long roomId;
 }

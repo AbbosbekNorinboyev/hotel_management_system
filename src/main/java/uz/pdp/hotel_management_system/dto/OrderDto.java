@@ -11,9 +11,9 @@ import java.time.LocalDate;
 @Setter
 @ToString
 public class OrderDto {
-    private Integer id;
-    private Integer authUserId;
-    private Integer roomId;
+    private Long id;
+    private Long authUserId;
+    private Long roomId;
     private int numberOfPeople;
     private LocalDate beginDate;
     private LocalDate endDate;

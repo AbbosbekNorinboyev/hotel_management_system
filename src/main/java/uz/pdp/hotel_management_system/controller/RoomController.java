@@ -21,7 +21,7 @@ public class RoomController {
     }
 
     @GetMapping("/get")
-    public Response getRoom(@RequestParam("roomId") Integer roomId) {
+    public Response getRoom(@RequestParam("roomId") Long roomId) {
         return roomService.getRoomById(roomId);
     }
 

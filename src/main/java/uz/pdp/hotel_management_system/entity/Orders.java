@@ -15,13 +15,15 @@ import java.time.LocalDate;
 public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "auth_user_id")
     private AuthUser authUser;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id")
     private Room room;
+
     private int numberOfPeople;
     private LocalDate beginDate;
     private LocalDate endDate;

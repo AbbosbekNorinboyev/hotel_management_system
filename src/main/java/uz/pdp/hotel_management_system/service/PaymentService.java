@@ -11,7 +11,7 @@ import uz.pdp.hotel_management_system.dto.response.Response;
 public interface PaymentService {
     Response createPayment(PaymentDto paymentDto);
 
-    ResponseEntity<?> getPayment(Integer paymentId);
+    ResponseEntity<?> getPayment(Long paymentId);
 
     ResponseEntity<?> getAllPayment();
 

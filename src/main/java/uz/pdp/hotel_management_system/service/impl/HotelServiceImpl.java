@@ -40,7 +40,7 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public Response getHotelById(Integer hotelId) {
+    public Response getHotelById(Long hotelId) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelId));
         log.info("Hotel successfully found");
@@ -79,7 +79,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Transactional
     @Override
-    public Response deleteHotelById(Integer hotelId) {
+    public Response deleteHotelById(Long hotelId) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Hotel not found: " + hotelId));
         roomRepository.deleteRoomByHotelId(hotel.getId());

@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @ToString
 public class HotelDto {
-    private Integer id;
+    private Long id;
     @NotBlank(message = "name can not be null or empty")
     private String name;
     @NotBlank(message = "address can not be null or empty")

@@ -7,7 +7,7 @@ import uz.pdp.hotel_management_system.dto.response.Response;
 public interface RoomService {
     Response createRoom(RoomDto roomDto);
 
-    Response getRoomById(Integer roomId);
+    Response getRoomById(Long roomId);
 
     Response getAllRoom();
 
