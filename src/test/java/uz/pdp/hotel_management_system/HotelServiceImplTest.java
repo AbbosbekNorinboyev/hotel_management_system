@@ -66,7 +66,7 @@ public class HotelServiceImplTest {
     void testGetHotelByIdSuccess() {
         // Given
         Hotel hotel = Hotel.builder()
-                .id(5)
+                .id(5L)
                 .address("Alisher Navoiy Street")
                 .city("Tashkent")
                 .name("One Star")
@@ -74,18 +74,18 @@ public class HotelServiceImplTest {
                 .build();
 
         HotelDto hotelDto = HotelDto.builder()
-                .id(5)
+                .id(5L)
                 .address("Alisher Navoiy Street")
                 .city("Tashkent")
                 .name("One Star")
                 .phoneNumber("+998711234567")
                 .build();
 
-        when(hotelRepository.findById(5)).thenReturn(Optional.of(hotel));
+        when(hotelRepository.findById(5L)).thenReturn(Optional.of(hotel));
         when(hotelMapper.toDto(hotel)).thenReturn(hotelDto);
 
         // When
-        Response hotelFound = hotelService.getHotelById(5);
+        Response hotelFound = hotelService.getHotelById(5L);
         HotelDto data = (HotelDto) hotelFound.getData();
 
         // Then
@@ -93,14 +93,14 @@ public class HotelServiceImplTest {
 
         // Verify
         Mockito.verify(hotelRepository, Mockito.times(1))
-                .findById(5); // faqat bi marta chaqirilishi kerak
+                .findById(5L); // faqat bi marta chaqirilishi kerak
         Mockito.verify(hotelMapper, Mockito.times(1)).toDto(hotel);
     }
 
     @Test
     void testUpdateHotel() {
         // Given (boshlang‘ich qiymatlar)
-        Integer hotelId = 1;
+        Long hotelId = 1L;
         Hotel existingHotel = new Hotel(hotelId, "Old Hotel", "Old Street", "Old City", "+998900000000");
         HotelDto updatedDto = new HotelDto(hotelId, "New Hotel", "New Street", "New City", "+998911234567");
         Hotel updatedHotel = new Hotel(hotelId, "New Hotel", "New Street", "New City", "+998911234567");
@@ -115,7 +115,7 @@ public class HotelServiceImplTest {
 
         // Then (tekshiruvlar)
         Assertions.assertNotNull(result);
-        Assertions.assertEquals("Hotel successfully updated", result.getMessage());
+        Assertions.assertEquals(true, result.getData());
 
         // Mock verify
         Mockito.verify(hotelRepository).findById(hotelId);
@@ -127,7 +127,7 @@ public class HotelServiceImplTest {
     void testDeleteHotel() {
         // Given
         Hotel hotel = Hotel.builder()
-                .id(5)
+                .id(5L)
                 .address("Alisher Navoiy Street")
                 .city("Tashkent")
                 .name("One Star")
@@ -138,7 +138,7 @@ public class HotelServiceImplTest {
 
         Response response = hotelService.deleteHotelById(hotel.getId());
 
-        Assertions.assertEquals("Hotel successfully deleted", response.getMessage());
+        Assertions.assertEquals(true, response.isSuccess());
 
         Mockito.verify(hotelRepository, Mockito.times(1)).delete(hotel);
         Mockito.verify(roomRepository, Mockito.times(1)).deleteRoomByHotelId(hotel.getId());

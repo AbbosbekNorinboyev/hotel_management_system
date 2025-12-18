@@ -52,15 +52,20 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public ResponseEntity<?> getAllHotel() {
+    public ResponseEntity<?> getAllHotel(Pageable pageable) {
         List<Hotel> hotels = hotelRepository.findAll();
-        log.info("Hotel list successfully found");
-        Response<Object, Object> response = Response.builder()
+        List<HotelDto> list = hotels.stream().map(hotelMapper::toDto).toList();
+        int start = pageable.getPageNumber() * pageable.getPageSize();
+        int end = Math.min(start + pageable.getPageSize(), list.size());
+        List<HotelDto> outputHotels = list.subList(start, end);
+        log.info("Hotel list successfully found pageable");
+
+        var response = Response.builder()
                 .success(true)
-                .data(hotelMapper.dtoList(hotels))
+                .data(outputHotels)
                 .error(Empty.builder().build())
                 .build();
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @Override
@@ -89,26 +94,6 @@ public class HotelServiceImpl implements HotelService {
                 .success(true)
                 .data(Empty.builder().build())
                 .error(Empty.builder().build())
-                .build();
-    }
-
-    @Override
-    public Response getAllHotelPage(Pageable pageable) {
-        List<Hotel> hotels = hotelRepository.findAll();
-        if (!hotels.isEmpty()) {
-            List<HotelDto> list = hotels.stream().map(hotelMapper::toDto).toList();
-            int start = pageable.getPageNumber() * pageable.getPageSize();
-            int end = Math.min(start + pageable.getPageSize(), list.size());
-            List<HotelDto> outputHotels = list.subList(start, end);
-            log.info("Hotel list successfully found pageable");
-            return Response.builder()
-                    .success(true)
-                    .data(outputHotels)
-                    .error(Empty.builder().build())
-                    .build();
-        }
-        return Response.builder()
-                .success(false)
                 .build();
     }
 }

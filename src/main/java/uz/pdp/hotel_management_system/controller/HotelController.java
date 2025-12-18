@@ -26,9 +26,11 @@ public class HotelController {
         return hotelService.getHotelById(hotelId);
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAllHotel() {
-        return hotelService.getAllHotel();
+    @GetMapping("/getAll/page")
+    public ResponseEntity<?> getAllHotel(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                         @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return hotelService.getAllHotel(pageable);
     }
 
     @PutMapping("/update")
@@ -39,12 +41,5 @@ public class HotelController {
     @DeleteMapping("/delete")
     public Response deleteHotel(@RequestParam("hotelId") Long hotelId) {
         return hotelService.deleteHotelById(hotelId);
-    }
-
-    @GetMapping("/getAll/page")
-    public Response getAllHotelPage(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                    @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return hotelService.getAllHotelPage(pageable);
     }
 }

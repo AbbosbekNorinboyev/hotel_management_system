@@ -11,12 +11,10 @@ public interface HotelService {
 
     Response getHotelById(Long hotelId);
 
-    ResponseEntity<?> getAllHotel();
+    ResponseEntity<?> getAllHotel(Pageable pageable);
 
     Response updateHotel(HotelDto hotelDto);
 
     @Transactional
     Response deleteHotelById(Long hotelId);
-
-    Response getAllHotelPage(Pageable pageable);
 }

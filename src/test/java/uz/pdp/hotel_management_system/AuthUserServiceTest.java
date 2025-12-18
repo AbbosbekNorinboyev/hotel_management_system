@@ -25,15 +25,15 @@ public class AuthUserServiceTest {
     void testGetUserNameByIdSuccess() {
         // Given
         AuthUser authUser = AuthUser.builder()
-                .id(1)
+                .id(1L)
                 .username("abbos")
                 .role(Role.ADMIN)
                 .password("2210")
                 .build();
-        Mockito.when(authUserRepository.findById(1)).thenReturn(Optional.of(authUser));
+        Mockito.when(authUserRepository.findById(1L)).thenReturn(Optional.of(authUser));
 
         // When
-        String username = authUserService.getUserNameById(1);
+        String username = authUserService.getUserNameById(1L);
 
         // Then
         Assertions.assertEquals("abbos", username);
@@ -42,9 +42,9 @@ public class AuthUserServiceTest {
     @Test
     void testGetUserNameByIdNotFound() {
         // Given
-        Mockito.when(authUserRepository.findById(2)).thenReturn(Optional.empty());
+        Mockito.when(authUserRepository.findById(2L)).thenReturn(Optional.empty());
 
         // When & Then
-        Assertions.assertThrows(RuntimeException.class, () -> authUserService.getUserNameById(2));
+        Assertions.assertThrows(RuntimeException.class, () -> authUserService.getUserNameById(2L));
     }
 }

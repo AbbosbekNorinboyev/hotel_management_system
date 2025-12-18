@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import uz.pdp.hotel_management_system.dto.HotelDto;
 import uz.pdp.hotel_management_system.dto.RoomDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.Hotel;
@@ -74,7 +73,7 @@ public class RoomServiceImplTest {
     void testGetRoomByIdSuccess() {
         // Given
         Hotel hotel = Hotel.builder()
-                .id(5)
+                .id(5L)
                 .address("Alisher Navoiy Street")
                 .city("Tashkent")
                 .name("One Star")
@@ -82,7 +81,7 @@ public class RoomServiceImplTest {
                 .build();
 
         Room room = Room.builder()
-                .id(2)
+                .id(2L)
                 .number(2)
                 .numberOfPeople(2)
                 .price(200000.0)
@@ -92,7 +91,7 @@ public class RoomServiceImplTest {
                 .build();
 
         RoomDto roomDto = RoomDto.builder()
-                .id(2)
+                .id(2L)
                 .number(2)
                 .numberOfPeople(2)
                 .price(200000.0)
@@ -101,11 +100,11 @@ public class RoomServiceImplTest {
                 .hotelId(hotel != null ? hotel.getId() : null)
                 .build();
 
-        Mockito.when(roomRepository.findById(2)).thenReturn(Optional.of(room));
+        Mockito.when(roomRepository.findById(2L)).thenReturn(Optional.of(room));
         Mockito.when(roomMapper.toDto(room)).thenReturn(roomDto);
 
         // When
-        Response roomFound = roomService.getRoomById(2);
+        Response roomFound = roomService.getRoomById(2L);
         RoomDto data = (RoomDto) roomFound.getData();
 
         // Then
@@ -113,14 +112,14 @@ public class RoomServiceImplTest {
 
         // Verify
         Mockito.verify(roomRepository, Mockito.times(1))
-                .findById(2); // faqat bi marta chaqirilishi kerak
+                .findById(2L); // faqat bi marta chaqirilishi kerak
         Mockito.verify(roomMapper, Mockito.times(1)).toDto(room);
     }
 
     @Test
     void testGetRoomByIdNotFound() {
         // Given
-        Integer roomId = 1000; // DB da yo'q
+        Long roomId = 1000L; // DB da yo'q
         Mockito.when(roomRepository.findById(roomId)).thenReturn(Optional.empty());
 
         // When
@@ -138,17 +137,17 @@ public class RoomServiceImplTest {
     void testGetAllRoom() {
         // Given
         Hotel hotel = Hotel.builder()
-                .id(5)
+                .id(5L)
                 .address("Alisher Navoiy Street")
                 .city("Tashkent")
                 .name("One Star")
                 .phoneNumber("+998711234567")
                 .build();
         List<Room> rooms = List.of(
-                new Room(2, 2, 2, 200000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE)
+                new Room(2L, 2, 2, 200000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE)
         );
         List<RoomDto> roomDtoList = List.of(
-                new RoomDto(2, 2, 2, 200000.0, hotel.getId(), RoomState.EMPTY, RoomState.ACTIVE)
+                new RoomDto(2L, 2, 2, 200000.0, hotel.getId(), RoomState.EMPTY, RoomState.ACTIVE)
         );
         Mockito.when(roomRepository.findAll()).thenReturn(rooms);
         Mockito.when(roomMapper.dtoList(rooms)).thenReturn(roomDtoList);
@@ -167,8 +166,8 @@ public class RoomServiceImplTest {
     @Test
     void testUpdateRoom() {
         // Given (boshlang‘ich qiymatlar)
-        Integer roomId = 1;
-        Hotel hotel = new Hotel(5, "New Hotel", "New Street", "New City", "+998911234567");
+        Long roomId = 1L;
+        Hotel hotel = new Hotel(5L, "New Hotel", "New Street", "New City", "+998911234567");
         Room existingRoom = new Room(roomId, 2, 3, 1000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE);
         RoomDto updatedDto = new RoomDto(roomId, 3, 4, 10000.0, hotel.getId(), RoomState.EMPTY, RoomState.ACTIVE);
         Room updatedRoom = new Room(roomId, 3, 4, 10000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE);
@@ -183,7 +182,7 @@ public class RoomServiceImplTest {
 
         // Then (tekshiruvlar)
         Assertions.assertNotNull(result);
-        Assertions.assertEquals("Room successfully updated", result.getMessage());
+        Assertions.assertEquals(true, result.isSuccess());
 
         // Mock verify
         Mockito.verify(roomRepository).findById(roomId);
