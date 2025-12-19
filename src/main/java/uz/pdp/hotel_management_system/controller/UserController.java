@@ -1,9 +1,11 @@
 package uz.pdp.hotel_management_system.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uz.pdp.hotel_management_system.entity.AuthUser;
 import uz.pdp.hotel_management_system.service.UserService;
@@ -18,5 +20,11 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<?> me(@CurrentUser AuthUser authUser) {
         return userService.me(authUser);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAll(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                    @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
+        return userService.getAll(PageRequest.of(page, size));
     }
 }

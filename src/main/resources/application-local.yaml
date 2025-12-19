@@ -1,12 +1,28 @@
 server:
   port: 1173
+  shutdown: graceful
 
 spring:
+  application:
+    name: HOTEL MANAGEMENT SYSTEM
+
+  # Postgresql configuration
   datasource:
     url: jdbc:postgresql://localhost:5432/project?currentSchema=hotel_management_system
     username: postgres
     password: 2210
     driver-class-name: org.postgresql.Driver
+
+    hikari:
+      maximum-pool-size: 30             # maksimal ulanishlar soni
+      leak-detection-threshold: 60000
+      # HikariCP specific settings
+      minimum-idle: 5                   # bo‘sh turgan minimal ulanishlar
+      connection-timeout: 30000         # 30s ichida ulanish bo‘lmasa xato beradi
+      idle-timeout: 60000               # ulanish bo‘sh tursa 30s dan keyin yopiladi
+      max-lifetime: 1800000             # ulanish 30 daqiqadan keyin yangilanadi
+
+  # JPA (Hibernate) config
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,6 +30,19 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  # Redis config
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 2
+      connect-timeout: 6000ms
+      timeout: 3000ms
+      repositories:
+        enabled: true
+  cache:
+    type: redis
 
 # Swagger config
 springdoc:
