@@ -15,14 +15,20 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private Integer number;
+
     private Integer numberOfPeople;
     private Double price;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
+
     @Enumerated(EnumType.STRING)
     private RoomState status = RoomState.ACTIVE;
+
     @Enumerated(EnumType.STRING)
     private RoomState state = RoomState.EMPTY;
 }
