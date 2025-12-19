@@ -14,7 +14,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             " from Booking b " +
             " group by b.room.id " +
             " order by room_count desc")
-    List<Object[]> findRoomBookingCounts();
+    List<Object[]> findRoomBookingAllCounts();
 
     @Query("SELECT SUM(b.room.price) FROM Booking b " +
             "WHERE b.beginDate = CURRENT_DATE")

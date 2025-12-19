@@ -25,7 +25,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         StatsDto statsDto = new StatsDto();
 
         // Eng ko‘p band bo‘lgan xona
-        List<Object[]> roomBookingCounts = bookingRepository.findRoomBookingCounts();
+        List<Object[]> roomBookingCounts = bookingRepository.findRoomBookingAllCounts();
         if (!roomBookingCounts.isEmpty()) {
             Long roomId = (Long) roomBookingCounts.get(0)[0];
             Room room = roomRepository.findById(roomId).orElse(null);
