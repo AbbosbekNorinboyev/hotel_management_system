@@ -5,7 +5,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import uz.pdp.hotel_management_system.entity.Booking;
 import uz.pdp.hotel_management_system.entity.Room;
-import uz.pdp.hotel_management_system.enums.RoomState;
+import uz.pdp.hotel_management_system.enums.RoomStatus;
 import uz.pdp.hotel_management_system.repository.BookingRepository;
 import uz.pdp.hotel_management_system.repository.RoomRepository;
 
@@ -29,8 +29,8 @@ public class HotelSchedule {
                 Optional<Room> roomOptional = roomRepository.findById(book.getRoom().getId());
                 if (roomOptional.isPresent()) {
                     Room room = roomOptional.get();
-                    if (room.getState() != RoomState.EMPTY) {
-                        room.setState(RoomState.EMPTY); // Xonani bo'shatish
+                    if (room.getStatus() != RoomStatus.EMPTY) {
+                        room.setStatus(RoomStatus.EMPTY); // Xonani bo'shatish
                         roomRepository.save(room);
                     }
                 }

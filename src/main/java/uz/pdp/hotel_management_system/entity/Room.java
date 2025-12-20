@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.pdp.hotel_management_system.enums.RoomState;
+import uz.pdp.hotel_management_system.enums.RoomStatus;
 
 @Entity
 @NoArgsConstructor
@@ -29,10 +30,10 @@ public class Room {
     private Hotel hotel;
 
     @Enumerated(EnumType.STRING)
-    private RoomState status = RoomState.ACTIVE;
+    private RoomStatus status;
 
     @Enumerated(EnumType.STRING)
-    private RoomState state = RoomState.EMPTY;
+    private RoomState state;
 
     @ManyToOne
     @JoinColumn(name = "branch_id")

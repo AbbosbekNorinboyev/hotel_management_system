@@ -8,9 +8,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uz.pdp.hotel_management_system.dto.RoomDto;
 import uz.pdp.hotel_management_system.dto.response.Response;
+import uz.pdp.hotel_management_system.entity.Branch;
 import uz.pdp.hotel_management_system.entity.Hotel;
 import uz.pdp.hotel_management_system.entity.Room;
 import uz.pdp.hotel_management_system.enums.RoomState;
+import uz.pdp.hotel_management_system.enums.RoomStatus;
 import uz.pdp.hotel_management_system.mapper.RoomMapper;
 import uz.pdp.hotel_management_system.repository.RoomRepository;
 import uz.pdp.hotel_management_system.service.RoomService;
@@ -40,8 +42,8 @@ public class RoomServiceImplTest {
                 .number(3)
                 .numberOfPeople(3)
                 .price(300000.0)
-                .state(RoomState.EMPTY)
-                .status(RoomState.ACTIVE)
+                .state(RoomState.AVAILABLE)
+                .status(RoomStatus.ACTIVE)
                 .hotel(hotel)
                 .build();
 
@@ -49,8 +51,8 @@ public class RoomServiceImplTest {
                 .number(3)
                 .numberOfPeople(3)
                 .price(300000.0)
-                .state(RoomState.EMPTY)
-                .status(RoomState.ACTIVE)
+                .state(RoomState.AVAILABLE)
+                .status(RoomStatus.ACTIVE)
                 .hotelId(hotel != null ? hotel.getId() : null)
                 .build();
 
@@ -85,8 +87,8 @@ public class RoomServiceImplTest {
                 .number(2)
                 .numberOfPeople(2)
                 .price(200000.0)
-                .state(RoomState.EMPTY)
-                .status(RoomState.ACTIVE)
+                .state(RoomState.AVAILABLE)
+                .status(RoomStatus.ACTIVE)
                 .hotel(hotel)
                 .build();
 
@@ -95,8 +97,8 @@ public class RoomServiceImplTest {
                 .number(2)
                 .numberOfPeople(2)
                 .price(200000.0)
-                .state(RoomState.EMPTY)
-                .status(RoomState.ACTIVE)
+                .state(RoomState.AVAILABLE)
+                .status(RoomStatus.ACTIVE)
                 .hotelId(hotel != null ? hotel.getId() : null)
                 .build();
 
@@ -143,11 +145,23 @@ public class RoomServiceImplTest {
                 .name("One Star")
                 .phoneNumber("+998711234567")
                 .build();
+
+        Branch branch = Branch.builder()
+                .id(2L)
+                .name("string")
+                .code("string")
+                .address("string")
+                .city("string")
+                .code("string")
+                .country("string")
+                .email("string")
+                .active(true)
+                .build();
         List<Room> rooms = List.of(
-                new Room(2L, 2, 2, 200000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE)
+                new Room(2L, 2, 2, 200000.0, hotel, RoomStatus.ACTIVE, RoomState.AVAILABLE, branch)
         );
         List<RoomDto> roomDtoList = List.of(
-                new RoomDto(2L, 2, 2, 200000.0, hotel.getId(), RoomState.EMPTY, RoomState.ACTIVE)
+                new RoomDto(2L, 2, 2, 200000.0, hotel.getId(), RoomStatus.ACTIVE, RoomState.AVAILABLE, branch.getId())
         );
         Mockito.when(roomRepository.findAll()).thenReturn(rooms);
         Mockito.when(roomMapper.dtoList(rooms)).thenReturn(roomDtoList);
@@ -168,9 +182,20 @@ public class RoomServiceImplTest {
         // Given (boshlang‘ich qiymatlar)
         Long roomId = 1L;
         Hotel hotel = new Hotel(5L, "New Hotel", "New Street", "New City", "+998911234567");
-        Room existingRoom = new Room(roomId, 2, 3, 1000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE);
-        RoomDto updatedDto = new RoomDto(roomId, 3, 4, 10000.0, hotel.getId(), RoomState.EMPTY, RoomState.ACTIVE);
-        Room updatedRoom = new Room(roomId, 3, 4, 10000.0, hotel, RoomState.EMPTY, RoomState.ACTIVE);
+        Branch branch = Branch.builder()
+                .id(2L)
+                .name("string")
+                .code("string")
+                .address("string")
+                .city("string")
+                .code("string")
+                .country("string")
+                .email("string")
+                .active(true)
+                .build();
+        Room existingRoom = new Room(roomId, 2, 3, 1000.0, hotel, RoomStatus.ACTIVE, RoomState.AVAILABLE, branch);
+        RoomDto updatedDto = new RoomDto(roomId, 3, 4, 10000.0, hotel.getId(), RoomStatus.ACTIVE, RoomState.AVAILABLE, branch.getId());
+        Room updatedRoom = new Room(roomId, 3, 4, 10000.0, hotel, RoomStatus.ACTIVE, RoomState.AVAILABLE, branch);
 
         // Mock ishlatish
         Mockito.when(roomRepository.findById(roomId)).thenReturn(Optional.of(existingRoom));

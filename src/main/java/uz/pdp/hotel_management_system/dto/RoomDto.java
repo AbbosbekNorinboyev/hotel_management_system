@@ -1,12 +1,11 @@
 package uz.pdp.hotel_management_system.dto;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uz.pdp.hotel_management_system.enums.RoomState;
+import uz.pdp.hotel_management_system.enums.RoomStatus;
 
 @NoArgsConstructor
 @Builder
@@ -18,9 +17,7 @@ public class RoomDto {
     private Integer numberOfPeople;
     private Double price;
     private Long hotelId;
-    @Enumerated(EnumType.STRING)
-    private RoomState status = RoomState.ACTIVE;
-    @Enumerated(EnumType.STRING)
-    private RoomState state = RoomState.EMPTY;
+    private RoomStatus status;
+    private RoomState state;
     private Long branchId;
 }
