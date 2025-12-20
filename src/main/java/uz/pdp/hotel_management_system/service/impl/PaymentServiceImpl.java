@@ -27,7 +27,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public ResponseEntity<?> createPayment(PaymentDto paymentDto) {
         Payment payment = paymentMapper.toEntity(paymentDto);
-        paymentRepository.save(payment);
+        paymentRepository.saveAndFlush(payment);
         log.info("Payment successfully created");
 
         var response = Response.builder()

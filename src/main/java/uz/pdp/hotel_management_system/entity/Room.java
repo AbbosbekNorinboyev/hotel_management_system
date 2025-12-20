@@ -1,19 +1,21 @@
 package uz.pdp.hotel_management_system.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import uz.pdp.hotel_management_system.enums.RoomState;
 
 @Entity
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class Room {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "room_id_seq")
+    @SequenceGenerator(name = "room_id_seq", sequenceName = "room_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -31,4 +33,8 @@ public class Room {
 
     @Enumerated(EnumType.STRING)
     private RoomState state = RoomState.EMPTY;
+
+    @ManyToOne
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
 }

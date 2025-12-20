@@ -1,14 +1,15 @@
 package uz.pdp.hotel_management_system.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class HotelDto {
     private Long id;
     @NotBlank(message = "name can not be null or empty")

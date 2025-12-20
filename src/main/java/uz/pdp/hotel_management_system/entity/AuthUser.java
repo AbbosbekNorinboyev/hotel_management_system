@@ -19,8 +19,10 @@ import java.util.List;
 @ToString
 public class AuthUser implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "auth_user_id_seq")
+    @SequenceGenerator(name = "auth_user_id_seq", sequenceName = "auth_user_id_seq", allocationSize = 1)
     private Long id;
+
     private String username;
     private String password;
     @Enumerated(EnumType.STRING)

@@ -50,9 +50,9 @@ public class BookingMapper {
                 .build();
     }
 
-    public List<BookingDto> dtoList(List<Booking> orders) {
-        if (orders != null && !orders.isEmpty()) {
-            return orders.stream().map(this::toDto).toList();
+    public List<BookingDto> dtoList(List<Booking> list) {
+        if (list != null && !list.isEmpty()) {
+            return list.stream().map(this::toDto).toList();
         }
         return new ArrayList<>();
     }

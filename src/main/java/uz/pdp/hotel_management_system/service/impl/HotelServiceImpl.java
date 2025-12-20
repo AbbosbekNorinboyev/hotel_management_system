@@ -30,7 +30,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public Response createHotel(HotelDto hotelDto) {
         Hotel hotel = hotelMapper.toEntity(hotelDto);
-        hotelRepository.save(hotel);
+        hotelRepository.saveAndFlush(hotel);
         log.info("Hotel successfully created");
         return Response.builder()
                 .success(true)

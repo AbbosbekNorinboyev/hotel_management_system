@@ -26,7 +26,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Response createRoom(RoomDto roomDto) {
         Room room = roomMapper.toEntity(roomDto);
-        roomRepository.save(room);
+        roomRepository.saveAndFlush(room);
         log.info("Room successfully created");
         return Response.builder()
                 .success(true)

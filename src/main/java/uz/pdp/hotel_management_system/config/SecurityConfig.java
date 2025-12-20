@@ -57,7 +57,10 @@ public class SecurityConfig {
                                     "/api/rooms/update",
                                     "/api/payments/create",
                                     "/api/bookings/create",
-                                    "/api/bookings/delete"
+                                    "/api/bookings/delete",
+                                    "/api/branches/add",
+                                    "/api/branches/update",
+                                    "/api/branches/delete"
                             ).hasRole("ADMIN")
                             .anyRequest().authenticated();
                 })

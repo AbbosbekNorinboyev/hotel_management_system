@@ -43,7 +43,7 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setAuthUser(authUser);
         booking.setRoom(room);
-        bookingRepository.save(booking);
+        bookingRepository.saveAndFlush(booking);
         log.info("Booking successfully created");
 
         var response = Response.builder()

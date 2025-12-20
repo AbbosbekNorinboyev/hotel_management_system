@@ -40,9 +40,9 @@ public class PaymentMapper {
                 .build();
     }
 
-    public List<PaymentDto> dtoList(List<Payment> payments) {
-        if (payments != null && !payments.isEmpty()) {
-            return payments.stream().map(this::toDto).toList();
+    public List<PaymentDto> dtoList(List<Payment> list) {
+        if (list != null && !list.isEmpty()) {
+            return list.stream().map(this::toDto).toList();
         }
         return new ArrayList<>();
     }

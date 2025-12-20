@@ -1,15 +1,16 @@
 package uz.pdp.hotel_management_system.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 public class BookingDto {
     private Long id;
     private Long authUserId;

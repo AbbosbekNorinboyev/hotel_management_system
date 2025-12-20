@@ -15,8 +15,10 @@ import java.time.LocalDateTime;
 @ToString
 public class Payment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_id_seq")
+    @SequenceGenerator(name = "payment_id_seq", sequenceName = "payment_id_seq", allocationSize = 1)
     private Long id;
+
     private Double amount;
     private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
