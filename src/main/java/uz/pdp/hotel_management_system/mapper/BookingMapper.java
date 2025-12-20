@@ -35,18 +35,19 @@ public class BookingMapper {
                 .build();
     }
 
-    public BookingDto toDto(Booking order) {
-        AuthUser authUser = authUserRepository.findById(order.getAuthUser().getId())
-                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Order not found: " + order.getAuthUser().getId()));
-        Room room = roomRepository.findById(order.getRoom().getId())
-                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + order.getRoom().getId()));
+    public BookingDto toDto(Booking booking) {
+        AuthUser authUser = authUserRepository.findById(booking.getAuthUser().getId())
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Booking not found: " + booking.getAuthUser().getId()));
+        Room room = roomRepository.findById(booking.getRoom().getId())
+                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Room not found: " + booking.getRoom().getId()));
         return BookingDto.builder()
-                .id(order.getId())
+                .id(booking.getId())
                 .authUserId(authUser.getId())
                 .roomId(room.getId())
-                .numberOfPeople(order.getNumberOfPeople())
-                .beginDate(order.getBeginDate())
-                .endDate(order.getEndDate())
+                .numberOfPeople(booking.getNumberOfPeople())
+                .status(booking.getStatus())
+                .beginDate(booking.getBeginDate())
+                .endDate(booking.getEndDate())
                 .build();
     }
 

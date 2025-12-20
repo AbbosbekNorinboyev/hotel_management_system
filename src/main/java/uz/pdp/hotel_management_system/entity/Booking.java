@@ -2,6 +2,7 @@ package uz.pdp.hotel_management_system.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import uz.pdp.hotel_management_system.enums.BookingStatus;
 
 import java.time.LocalDate;
 
@@ -25,6 +26,9 @@ public class Booking {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
 
     private Integer numberOfPeople;
     private LocalDate beginDate;

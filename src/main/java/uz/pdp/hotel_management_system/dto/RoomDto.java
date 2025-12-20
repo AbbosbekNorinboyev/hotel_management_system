@@ -22,4 +22,5 @@ public class RoomDto {
     private RoomState status = RoomState.ACTIVE;
     @Enumerated(EnumType.STRING)
     private RoomState state = RoomState.EMPTY;
+    private Long branchId;
 }

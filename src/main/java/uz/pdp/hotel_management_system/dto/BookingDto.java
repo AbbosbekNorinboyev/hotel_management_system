@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.pdp.hotel_management_system.enums.BookingStatus;
 
 import java.time.LocalDate;
 
@@ -16,6 +17,7 @@ public class BookingDto {
     private Long authUserId;
     private Long roomId;
     private int numberOfPeople;
+    private BookingStatus status;
     private LocalDate beginDate;
     private LocalDate endDate;
 }

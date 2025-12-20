@@ -13,12 +13,15 @@ import uz.pdp.hotel_management_system.dto.response.Response;
 import uz.pdp.hotel_management_system.entity.AuthUser;
 import uz.pdp.hotel_management_system.entity.Booking;
 import uz.pdp.hotel_management_system.entity.Room;
+import uz.pdp.hotel_management_system.enums.BookingStatus;
 import uz.pdp.hotel_management_system.exception.CustomException;
+import uz.pdp.hotel_management_system.exception.ResourceNotFoundException;
 import uz.pdp.hotel_management_system.mapper.BookingMapper;
 import uz.pdp.hotel_management_system.repository.AuthUserRepository;
 import uz.pdp.hotel_management_system.repository.BookingRepository;
 import uz.pdp.hotel_management_system.repository.RoomRepository;
 import uz.pdp.hotel_management_system.service.BookingService;
+import uz.pdp.hotel_management_system.service.RoomService;
 
 import java.util.List;
 
@@ -30,6 +33,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
     private final BookingMapper bookingMapper;
+    private final RoomService roomService;
 
     @Override
     public ResponseEntity<?> createBooking(BookingDto bookingDto) {
@@ -43,6 +47,7 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setAuthUser(authUser);
         booking.setRoom(room);
+        booking.setStatus(BookingStatus.BOOKED);
         bookingRepository.saveAndFlush(booking);
         log.info("Booking successfully created");
 
@@ -98,5 +103,70 @@ public class BookingServiceImpl implements BookingService {
                 .error(Empty.builder().build())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> confirmBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Bookings npt found: " + bookingId));
+
+        if (booking.getStatus() != BookingStatus.BOOKED) {
+            return ResponseEntity.badRequest().body("Booking already confirmed or cancelled");
+        }
+
+        // Optional: check room availability again
+        if (!roomService.isAvailable(booking.getRoom(), booking.getBeginDate(), booking.getEndDate())) {
+            throw new RuntimeException("Room not available");
+        }
+
+        booking.setStatus(BookingStatus.CONFIRMED);
+        bookingRepository.saveAndFlush(booking);
+
+        var response = Response.builder()
+                .success(true)
+                .data(bookingMapper.toDto(booking))
+                .error(Empty.builder().build())
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<?> checkIn(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Bookings npt found: " + bookingId));
+
+        if (booking.getStatus() != BookingStatus.CONFIRMED) {
+            throw new RuntimeException("Cannot check-in, booking not confirmed");
+        }
+
+        booking.setStatus(BookingStatus.CHECKED_IN);
+        bookingRepository.saveAndFlush(booking);
+
+        var response = Response.builder()
+                .success(true)
+                .data(bookingMapper.toDto(booking))
+                .error(Empty.builder().build())
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<?> checkOut(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResourceNotFoundException("Bookings npt found: " + bookingId));
+
+        if (booking.getStatus() != BookingStatus.CHECKED_IN) {
+            throw new RuntimeException("Cannot check-out, guest not checked in yet");
+        }
+
+        booking.setStatus(BookingStatus.CHECKED_OUT);
+        bookingRepository.saveAndFlush(booking);
+
+        var response = Response.builder()
+                .success(true)
+                .data(bookingMapper.toDto(booking))
+                .error(Empty.builder().build())
+                .build();
+        return ResponseEntity.ok(response);
     }
 }

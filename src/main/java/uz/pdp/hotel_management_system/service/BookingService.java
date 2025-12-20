@@ -14,4 +14,10 @@ public interface BookingService {
 
     @Transactional
     ResponseEntity<?> deleteBookingById(Long bookingId);
+
+    ResponseEntity<?> confirmBooking(Long bookingId);
+
+    ResponseEntity<?> checkIn(Long bookingId);
+
+    ResponseEntity<?> checkOut(Long bookingId);
 }

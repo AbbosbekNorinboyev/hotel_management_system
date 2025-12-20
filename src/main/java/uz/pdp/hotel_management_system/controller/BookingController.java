@@ -36,4 +36,19 @@ public class BookingController {
     public ResponseEntity<?> deleteBooking(@RequestParam("bookingId") Long bookingId) {
         return bookingService.deleteBookingById(bookingId);
     }
+
+    @PostMapping("/confirm")
+    public ResponseEntity<?> confirmBooking(Long bookingId) {
+        return bookingService.confirmBooking(bookingId);
+    }
+
+    @PostMapping("/checkin")
+    public ResponseEntity<?> checkIn(Long bookingId) {
+        return bookingService.checkIn(bookingId);
+    }
+
+    @PostMapping("/checkout")
+    public ResponseEntity<?> checkOut(Long bookingId) {
+        return bookingService.checkOut(bookingId);
+    }
 }

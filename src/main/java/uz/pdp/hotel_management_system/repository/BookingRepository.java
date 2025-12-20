@@ -4,8 +4,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import uz.pdp.hotel_management_system.entity.Booking;
+import uz.pdp.hotel_management_system.entity.Room;
+import uz.pdp.hotel_management_system.enums.BookingStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -24,4 +27,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             " where month(b.beginDate) = month(current_date)" +
             " and year(b.endDate) = year(current_date )")
     Long countMonthlyBooking();
+
+    int countByRoomAndStatusInAndBeginDateLessThanAndEndDateGreaterThan(Room room,
+                                                                               List<BookingStatus> confirmed,
+                                                                               LocalDate endDate,
+                                                                               LocalDate beginDate);
 }

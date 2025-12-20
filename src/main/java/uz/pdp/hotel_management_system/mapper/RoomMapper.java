@@ -1,13 +1,9 @@
 package uz.pdp.hotel_management_system.mapper;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import uz.pdp.hotel_management_system.dto.RoomDto;
-import uz.pdp.hotel_management_system.entity.Hotel;
 import uz.pdp.hotel_management_system.entity.Room;
-import uz.pdp.hotel_management_system.exception.CustomException;
-import uz.pdp.hotel_management_system.repository.HotelRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +11,12 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class RoomMapper {
-    private final HotelRepository hotelRepository;
-
     public Room toEntity(RoomDto roomDto) {
-        Hotel hotel = hotelRepository.findById(roomDto.getHotelId())
-                .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND,
-                        "Hotel not found from roomMapper: " + roomDto.getHotelId()));
         return Room.builder()
                 .id(roomDto.getId())
                 .number(roomDto.getNumber())
                 .numberOfPeople(roomDto.getNumberOfPeople())
                 .price(roomDto.getPrice())
-                .hotel(hotel)
                 .status(roomDto.getStatus())
                 .state(roomDto.getState())
                 .build();
@@ -39,6 +29,7 @@ public class RoomMapper {
                 .numberOfPeople(room.getNumberOfPeople())
                 .price(room.getPrice())
                 .hotelId(room.getHotel() != null ? room.getHotel().getId() : null)
+                .branchId(room.getBranch() != null ? room.getBranch().getId() : null)
                 .status(room.getStatus())
                 .state(room.getState())
                 .build();
