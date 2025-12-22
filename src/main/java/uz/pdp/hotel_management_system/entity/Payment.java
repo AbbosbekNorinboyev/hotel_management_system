@@ -21,6 +21,7 @@ public class Payment {
 
     private Double amount;
     private LocalDateTime createdAt;
+
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 

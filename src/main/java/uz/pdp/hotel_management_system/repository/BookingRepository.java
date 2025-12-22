@@ -32,4 +32,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                                                                List<BookingStatus> confirmed,
                                                                                LocalDate endDate,
                                                                                LocalDate beginDate);
+
+    List<Booking> findBookingByStatus(BookingStatus bookingStatus);
 }

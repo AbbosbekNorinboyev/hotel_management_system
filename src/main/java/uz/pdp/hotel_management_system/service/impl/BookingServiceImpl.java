@@ -23,6 +23,7 @@ import uz.pdp.hotel_management_system.repository.RoomRepository;
 import uz.pdp.hotel_management_system.service.BookingService;
 import uz.pdp.hotel_management_system.service.RoomService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -165,6 +166,18 @@ public class BookingServiceImpl implements BookingService {
         var response = Response.builder()
                 .success(true)
                 .data(bookingMapper.toDto(booking))
+                .error(Empty.builder().build())
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<?> getBookingByStatus(BookingStatus status) {
+        List<Booking> bookings = bookingRepository.findBookingByStatus(status);
+
+        var response = Response.builder()
+                .success(true)
+                .data(bookings)
                 .error(Empty.builder().build())
                 .build();
         return ResponseEntity.ok(response);

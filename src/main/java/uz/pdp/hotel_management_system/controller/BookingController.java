@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.hotel_management_system.dto.BookingDto;
+import uz.pdp.hotel_management_system.enums.BookingStatus;
 import uz.pdp.hotel_management_system.service.BookingService;
 
 @RestController
@@ -50,5 +51,10 @@ public class BookingController {
     @PostMapping("/checkout")
     public ResponseEntity<?> checkOut(Long bookingId) {
         return bookingService.checkOut(bookingId);
+    }
+
+    @GetMapping("/getByStatus")
+    public ResponseEntity<?> getBookingByStatus(@RequestParam BookingStatus status) {
+        return bookingService.getBookingByStatus(status);
     }
 }

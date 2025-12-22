@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import uz.pdp.hotel_management_system.dto.BookingDto;
+import uz.pdp.hotel_management_system.enums.BookingStatus;
 
 public interface BookingService {
     ResponseEntity<?> createBooking(BookingDto bookingDto);
@@ -20,4 +21,6 @@ public interface BookingService {
     ResponseEntity<?> checkIn(Long bookingId);
 
     ResponseEntity<?> checkOut(Long bookingId);
+
+    ResponseEntity<?> getBookingByStatus(BookingStatus status);
 }
