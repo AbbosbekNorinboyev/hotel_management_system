@@ -2,6 +2,7 @@ package uz.pdp.hotel_management_system.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import uz.pdp.hotel_management_system.enums.PaymentStatus;
 import uz.pdp.hotel_management_system.enums.PaymentType;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,9 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id")
